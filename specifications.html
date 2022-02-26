@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-US"
+	prefix="og: https://ogp.me/ns#" >
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://x-callback-url.com/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="http://x-callback-url.com/wp-content/themes/publish-xcallback/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+
+		<!-- All in One SEO 4.1.7 -->
+		<title>1.0 DRAFT Spec | x-callback-url</title>
+		<meta name="robots" content="max-image-preview:large" />
+		<link rel="canonical" href="http://x-callback-url.com/specifications/" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:site_name" content="x-callback-url | Interapp communication" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="1.0 DRAFT Spec | x-callback-url" />
+		<meta property="og:url" content="http://x-callback-url.com/specifications/" />
+		<meta property="article:published_time" content="2010-12-02T02:17:58+00:00" />
+		<meta property="article:modified_time" content="2015-07-21T12:48:45+00:00" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="1.0 DRAFT Spec | x-callback-url" />
+		<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebSite","@id":"http:\/\/x-callback-url.com\/#website","url":"http:\/\/x-callback-url.com\/","name":"x-callback-url","description":"Interapp communication","inLanguage":"en-US","publisher":{"@id":"http:\/\/x-callback-url.com\/#organization"}},{"@type":"Organization","@id":"http:\/\/x-callback-url.com\/#organization","name":"x-callback-url","url":"http:\/\/x-callback-url.com\/"},{"@type":"BreadcrumbList","@id":"http:\/\/x-callback-url.com\/specifications\/#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"http:\/\/x-callback-url.com\/#listItem","position":1,"item":{"@type":"WebPage","@id":"http:\/\/x-callback-url.com\/","name":"Home","description":"x-callback-url is a URL schema based protocol for interapp communication on iOS, iPhone, iPad, iPod Touch.","url":"http:\/\/x-callback-url.com\/"},"nextItem":"http:\/\/x-callback-url.com\/specifications\/#listItem"},{"@type":"ListItem","@id":"http:\/\/x-callback-url.com\/specifications\/#listItem","position":2,"item":{"@type":"WebPage","@id":"http:\/\/x-callback-url.com\/specifications\/","name":"1.0 DRAFT Spec","url":"http:\/\/x-callback-url.com\/specifications\/"},"previousItem":"http:\/\/x-callback-url.com\/#listItem"}]},{"@type":"WebPage","@id":"http:\/\/x-callback-url.com\/specifications\/#webpage","url":"http:\/\/x-callback-url.com\/specifications\/","name":"1.0 DRAFT Spec | x-callback-url","inLanguage":"en-US","isPartOf":{"@id":"http:\/\/x-callback-url.com\/#website"},"breadcrumb":{"@id":"http:\/\/x-callback-url.com\/specifications\/#breadcrumblist"},"datePublished":"2010-12-02T02:17:58-06:00","dateModified":"2015-07-21T12:48:45-05:00"}]}
+		</script>
+		<!-- All in One SEO -->
+
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="x-callback-url &raquo; Feed" href="http://x-callback-url.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="x-callback-url &raquo; Comments Feed" href="http://x-callback-url.com/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.1.0\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/x-callback-url.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.8.3"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([10084,65039,8205,55357,56613],[10084,65039,8203,55357,56613])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='wp-block-library-css'  href='http://x-callback-url.com/wp-includes/css/dist/block-library/style.min.css?ver=5.8.3' type='text/css' media='all' />
+<link rel='stylesheet' id='publish-style-css'  href='http://x-callback-url.com/wp-content/themes/publish-xcallback/style.css?ver=5.8.3' type='text/css' media='all' />
+<script type='text/javascript' src='http://x-callback-url.com/wp-includes/js/jquery/jquery.min.js?ver=3.6.0' id='jquery-core-js'></script>
+<script type='text/javascript' src='http://x-callback-url.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<link rel="https://api.w.org/" href="http://x-callback-url.com/wp-json/" /><link rel="alternate" type="application/json" href="http://x-callback-url.com/wp-json/wp/v2/pages/7" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://x-callback-url.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://x-callback-url.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.8.3" />
+<link rel='shortlink' href='http://x-callback-url.com/?p=7' />
+<link rel="alternate" type="application/json+oembed" href="http://x-callback-url.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fx-callback-url.com%2Fspecifications%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://x-callback-url.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fx-callback-url.com%2Fspecifications%2F&#038;format=xml" />
+		<style type="text/css" id="wp-custom-css">
+			body {
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif
+}		</style>
+		</head>
+
+<body class="page-template-default page page-id-7">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+					<a class="site-logo" href="http://x-callback-url.com/" title="x-callback-url" rel="home">
+				<img class="no-grav" src="http://x-callback-url.com/wp-content/uploads/2021/08/cropped-x-callback-url.png" height="512" width="512" alt="x-callback-url" />
+			</a>
+				<hgroup>
+			<h1 class="site-title"><a href="http://x-callback-url.com/" title="x-callback-url" rel="home">x-callback-url</a></h1>
+			<h2 class="site-description">Interapp communication</h2>
+		</hgroup>
+
+		<nav role="navigation" class="site-navigation main-navigation">
+			<h1 class="assistive-text">Menu</h1>
+			<div class="assistive-text skip-link"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+			<div class="menu"><ul>
+<li class="page_item page-item-4"><a href="http://x-callback-url.com/">Home</a></li>
+<li class="page_item page-item-7 current_page_item"><a href="http://x-callback-url.com/specifications/" aria-current="page">1.0 DRAFT Spec</a></li>
+<li class="page_item page-item-9"><a href="http://x-callback-url.com/implementation/">Implementation</a></li>
+<li class="page_item page-item-28"><a href="http://x-callback-url.com/examples/">Examples</a></li>
+<li class="page_item page-item-11"><a href="http://x-callback-url.com/apps/">Apps</a></li>
+<li class="page_item page-item-13"><a href="http://x-callback-url.com/blog/">Blog</a></li>
+<li class="page_item page-item-2"><a href="http://x-callback-url.com/about/">About</a></li>
+</ul></div>
+		</nav><!-- .site-navigation .main-navigation -->
+
+			</header><!-- #masthead .site-header -->
+
+	<div id="main" class="site-main">
+		<div id="primary" class="content-area">
+			<div id="content" class="site-content" role="main">
+
+				
+					
+<article id="post-7" class="post-7 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1 class="entry-title">1.0 DRAFT Spec</h1>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<h1 id="x_callback_url_10_draft">x-callback-url 1.0 DRAFT, R3</h1>
+<h2 id="abstract">Abstract</h2>
+<p>The x-callback-url specification is intended to standardize the use of URLs and registered URL schemes for inter-app communication and messaging on Apple’s iOS platforms.</p>
+<h2>Revisions</h2>
+<p>R3: Added &#8220;Security Concerns&#8221; section.</p>
+<p>R2: Added optional &#8220;x-cancel&#8221; parameter. When supported, this parameter would include a URL to open when the user indicated they want to cancel the action. The action did not succeed, nor generate an error, but the user just wishes to return to the source app.</p>
+<p>R1: Removed the &#8220;version&#8221; from the URL path. The current recommendation if versioning of an x-callback-url API is required would be to register separate URL schemes for each version. This method allows the calling app to determine which versions are available via calls to &#8220;canOpenURL&#8221;.</p>
+<h2 id="discussion">Discussion</h2>
+<p>iOS runs apps in sandboxes which providing limited means of communication between apps directly on the device. Shared files, messaging systems and other similar solutions used on desktop and server operating systems are not present in iOS.</p>
+<p>iOS does provide the ability for apps to <a href="http://developer.apple.com/library/ios/#documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StandardBehaviors/StandardBehaviors.html%23//apple_ref/doc/uid/TP40007072-Ch3-SW26">register URL schemes</a>. Many apps already use the feature to launch other apps and pass basic data in the URL parameters, but there is no standard for structure of these URLs and no current standard for allowing callbacks to be pass in the URL if the originating app wishes to receive some result based on the action.</p>
+<p>The goal of the x-callback-url specification is to provide a standardized means for iOS developers to expose and document the methods they make available to other apps. Using x-callback-url’s source apps can launch other apps passing data and context information, and also provide parameters instructing the target app to return data and control back to the source app after executing an action.  Specific supported actions will be dependent on the individual apps and will not be discussed in the specification.</p>
+<p>Apps using x-callback-url should provide support for receiving action URLs in the format described below. Details on implementation and sample code will also be available on the x-callback-url website.</p>
+<p>Note that starting with iOS 8, Apple has introduced <a href='https://developer.apple.com/library/ios/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214'>App Extensions</a> which address some of the requirements for inter-app communication in a vendor supported way. There are still areas where URL schemes make more sense, but we recommend using the extension opportunities first.</p>
+<h2 id="url_structure">URL Structure</h2>
+<pre class="brush: plain; title: ; notranslate" title="">
+[scheme]://[host]/[action]?[x-callback parameters]&amp;[action parameters]
+</pre>
+<h3 id="scheme">scheme</h3>
+<p>The scheme should be a unique string identifier the target app. URL schemes are registered with iOS via an app’s Info.plist file. To support receiving x-callback-url message, an app must register a protocol with iOS.  If your app uses x-callback-url, it is recommend you register a url scheme specifically for x-callback-url support, so that a source app can test for the registration of the scheme and ensure support is present.</p>
+<h3 id="host">host</h3>
+<p>URLs will be identified by the use of “x-callback-url” as the host portion of the URL.</p>
+<h3 id="action">action</h3>
+<p>The remaining portion of the URL path after the version make up the name of the action to be executed in the target app. These actions will vary by app and should be documented by the developer of the app supporting x-callback-url.</p>
+<h3 id="x_callback_parameters">x-callback Parameters</h3>
+<p>x-callback-url defines several parameters with specific purposes, all of which are optional. These parameters should be passed as query args in the URL, in the format “key1=value1&amp;key2=value2”. All values should be URL encoded strings.</p>
+<ul>
+<li><strong>x-source :</strong> The friendly name of the source app calling the action. If the action in the target app requires user interface elements, it may be necessary to identify to the user the app requesting the action.</li>
+<li><strong>x-success :</strong> If the action in the target method is intended to return a result to the source app, the x-callback parameter should be included and provide a URL to open to return to the source app. On completion of the action, the target app will open this URL, possibly with additional parameters tacked on to return a result to the source app. If x-success is not provided, it is assumed that the user will stay in the target app on successful completion of the action.</li>
+<li><strong>x-error :</strong> URL to open if the requested action generates an error in the target app. This URL will be open with at least the parameters <span style='whitespace:nowrap;'>&#8220;errorCode=code&amp;errorMessage=message&#8221;</span>. If x-error is not present, and a error occurs, it is assumed the target app will report the failure to the user and remain in the target app.</li>
+<li><strong>x-cancel :</strong> URL to open if the requested action is cancelled by the user. In the case where the target app offer the user the option to &#8220;cancel&#8221; the requested action, without a success or error result, this the the URL that should be opened to return the user to the source app.</li>
+</ul>
+<h3 id="action_parameters">Action Parameters</h3>
+<p>In addition to any of the optional parameters defined by x-callback-url, the query arguments can contain action parameters specific to target app&#8217;s supported actions. These parameters will be defined by the developer of the app supporting x-callback-url. The “x-” prefix should not be used on action parameters, but be reserved for additional parameters that may be defined by the x-callback-url specification.</p>
+<h3 id='security_concerns'>Security Concerns</h3>
+<p>Because URL schemes open pathways to the data stored in your app, it is recommended that you carefully consider security when implementing URL schemes–whether they conform to the x-callback-url specification or not. </p>
+<p>How to implement security is not covered by the specification, as the requirements vary greatly for different app, but, in general, URL schemes actions which perform destructive operations, post to services outside the app, or similar &#8220;dangerous&#8221; actions should require user-confirmation in-app to be sure the user has not unintentionally tapped on a malicious URL. Other mechanisms such as password keys, or similar may make sense for specific use cases.  </p>
+<h3>Learn More</h3>
+<p>To learn more, check out the <a href="/examples">Examples</a> and <a href="/implementation">Implementation</a> pages.</p>
+			</div><!-- .entry-content -->
+
+	</article><!-- #post-7 -->
+
+					
+	<div id="comments" class="comments-area">
+
+	
+	
+	
+	
+</div><!-- #comments .comments-area -->
+
+				
+			</div><!-- #content .site-content -->
+		</div><!-- #primary .content-area -->
+
+		<div id="secondary" class="widget-area" role="complementary">
+								</div><!-- #secondary .widget-area -->
+
+	</div><!-- #main .site-main -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/" rel="generator">Proudly powered by WordPress</a> Theme: Publish by <a href="http://kovshenin.com/" rel="designer">Konstantin Kovshenin</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon .site-footer -->
+</div><!-- #page .hfeed .site -->
+
+<script type='text/javascript' src='http://x-callback-url.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore.js?ver=3.0.9b' id='syntaxhighlighter-core-js'></script>
+<script type='text/javascript' src='http://x-callback-url.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain.js?ver=3.0.9b' id='syntaxhighlighter-brush-plain-js'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "http://x-callback-url.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.head.appendChild( corecss );
+		var themecssurl = "http://x-callback-url.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		document.head.appendChild( themecss );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['auto-links'] = false;
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['wrap-lines'] = false;
+	SyntaxHighlighter.all();
+
+	// Infinite scroll support
+	if ( typeof( jQuery ) !== 'undefined' ) {
+		jQuery( function( $ ) {
+			$( document.body ).on( 'post-load', function() {
+				SyntaxHighlighter.highlight();
+			} );
+		} );
+	}
+</script>
+<script type='text/javascript' src='http://x-callback-url.com/wp-content/themes/publish-xcallback/js/small-menu.js?ver=20120206' id='small-menu-js'></script>
+<script type='text/javascript' src='http://x-callback-url.com/wp-includes/js/wp-embed.min.js?ver=5.8.3' id='wp-embed-js'></script>
+
+</body>
+</html>
