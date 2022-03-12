@@ -1,0 +1,1683 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 12.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+
+<link rel="stylesheet" href="http://www.unicode.org/reports/reports.css" type="text/css">
+<style type="text/css">
+<!--
+.dtd         { font-family: monospace; font-size:90%; margin-left:3em; background-color:#CCCCFF }
+-->
+</style>
+<title>UTS #22: CharMapML</title>
+</head>
+
+<body bgcolor="#ffffff">
+
+<table class="header" width="95%">
+  <tr>
+    <td class="icon"><a href="http://www.unicode.org"><img align="middle" alt="[Unicode]" border="0" src="http://www.unicode.org/webscripts/logo60s2.gif" width="34" height="33"></a>&nbsp;&nbsp;<a class="bar" href="http://www.unicode.org/reports/">Technical                    
+      Reports</a></td>
+  </tr>
+  <tr>
+    <td class="gray">&nbsp;</td>
+  </tr>
+</table>
+<div class="body">
+  <h2 align="center">Unicode Technical Standard #22</h2>                   
+  <h1 align="center">Unicode Character Mapping Markup Language<br>
+    <span style="text-transform:none">(CharMapML)</span></h1>
+  <table class="wide" border="1">
+    <tr>
+      <td width="20%">Version</td>
+      <td>5.0.1</td>
+    </tr>
+    <tr>
+      <td>Authors</td>
+      <td>Mark Davis, Markus Scherer</td>
+    </tr>
+    <tr>
+      <td>Date</td>
+      <td>2017-05-31</td>
+    </tr>
+    <tr>
+      <td>This Version</td>
+      <td>
+	  <a href="http://www.unicode.org/reports/tr22/tr22-8.html">
+	  http://www.unicode.org/reports/tr22/tr22-8.html</a></td>
+    </tr>
+    <tr>
+      <td>Previous Version</td>
+      <td><a href="http://www.unicode.org/reports/tr22/tr22-7.html">http://www.unicode.org/reports/tr22/tr22-7.html</a></td>
+    </tr>
+    <tr>
+      <td>Latest Version</td>
+      <td><a href="http://www.unicode.org/reports/tr22/">http://www.unicode.org/reports/tr22/</a></td>
+    </tr>
+    <tr>
+      <td>DTDs</td>
+      <td><a href="http://www.unicode.org/reports/tr22/CharacterMapping.dtd">http://www.unicode.org/reports/tr22/CharacterMapping.dtd</a><br>
+          <a href="http://www.unicode.org/reports/tr22/CharacterMappingAliases.dtd">http://www.unicode.org/reports/tr22/CharacterMappingAliases.dtd</a></td>
+    </tr>
+    <tr>
+      <td>Revision</td>
+      <td><a href="#Modifications">8</a></td>
+    </tr>
+  </table>
+
+  <h3><br><i>Summary</i></h3>
+  <p><i><em>This document specifies an XML format for the interchange of mapping
+  data for character encodings, and describes some of the issues connected with
+  the use of character conversion. It provides a complete description for such
+  mappings in terms of a defined mapping to and from Unicode, and a description
+  of alias tables for the interchange of mapping table names.</em></i></p>
+
+  <h3><i>Status</i></h3>
+  <p><i>This document has been reviewed by Unicode members and other interested 
+    parties, and has been approved for publication by the Unicode Consortium. 
+    This is a stable document and may be used as reference material or cited as a 
+    normative reference by other specifications. No further revisions are 
+  planned. </i></p>
+  <blockquote>
+    <p><i><b>A Unicode Technical Standard (UTS)</b> is an 
+      independent specification. Conformance to the Unicode Standard does 
+      not imply conformance to any UTS.</i></p>
+  </blockquote>
+
+  <p><i>Please submit corrigenda and other comments with the online reporting
+  form [<a href="#Feedback">Feedback</a>]. Related information that is useful in
+  understanding this document is found in the <a href="#References">References</a>.
+  For the latest version of the Unicode Standard see [<a href="#Unicode">Unicode</a>].
+  For a list of current Unicode Technical Reports see [<a href="#Reports">Reports</a>].
+  For more information about versions of the Unicode Standard, see [<a href="#Versions">Versions</a>].</i></p>
+
+  <h3><i>Contents</i></h3>
+  <ul class="toc">
+    <li>1&nbsp; <a href="#Introduction">Introduction</a>                   
+      <ul class="toc">
+        <li>1.1&nbsp; <a href="#Illegal_and_Unassigned">Illegal and Unassigned Codes</a>                    
+          <ul class="toc">
+            <li>1.1.1&nbsp; <a href="#Best-Fit_Mappings">Best-Fit Mappings</a></li>                    
+            <li>1.1.2&nbsp; <a href="#Dual_Substitution_Handling">Dual Substitution Handling</a></li>                    
+          </ul>
+        </li>
+        <li>1.2&nbsp; <a href="#Completeness">Completeness</a></li>                    
+        <li>1.3&nbsp; <a href="#Canonical_Equivalence">Canonical Equivalence</a></li>                    
+        <li>1.4&nbsp; <a href="#Charset_Alias_Matching">Charset Alias Matching</a></li>                    
+      </ul>
+    </li>
+
+    <li>2&nbsp; <a href="#Conformance">Conformance</a></li>                    
+
+    <li>3&nbsp; <a href="#XML_Format">Character Mapping Table Format</a>                    
+      <ul class="toc">
+        <li>3.1&nbsp; <a href="#Header">Header</a></li>                    
+        <li>3.2&nbsp; <a href="#History">History</a></li>                    
+        <li>3.3&nbsp; <a href="#Validity_Specification">Validity Specification</a>                    
+          <ul class="toc">
+            <li>3.3.1&nbsp; <a href="#Validity_Error_Conditions">Error Conditions</a></li>                    
+            <li>3.3.2&nbsp; <a href="#Simple_SI_SO-Stateful_Encodings">Simple SI/SO-Stateful Encodings</a></li>                    
+          </ul>
+        </li>
+        <li>3.4&nbsp; <a href="#Assignments">Assignments</a>                    
+          <ul class="toc">
+            <li>3.4.1&nbsp; <a href="#Multiple_Characters">Mapping Multiple Characters</a></li>                    
+            <li>3.4.2&nbsp; <a href="#Assignment_Error_Conditions">Error Conditions</a></li>                    
+          </ul>
+        </li>
+        <li>3.5&nbsp; <a href="#ISO_2022">ISO 2022</a></li>                    
+      </ul>
+    </li>
+
+    <li>4&nbsp; <a href="#Names">Alias Table Format</a></li>                    
+
+    <li>5&nbsp; <a href="#Samples">Samples</a>                    
+      <ul class="toc">
+        <li>5.1&nbsp; <a href="#Full_Sample">Full Sample</a></li>                    
+        <li>5.2&nbsp; <a href="#UTF8_Sample">UTF-8 Sample</a>                    
+          <ul class="toc">
+            <li>5.2.1&nbsp; <a href="#Partial_Validity_Checks">Partial Validity Checks</a></li>                    
+            <li>5.2.2&nbsp; <a href="#Full_Validity_Checks">Full Validity Checks</a></li>                    
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li><a href="#Data_Files">Data Files</a></li>
+    <li><a href="#References">References</a></li>
+    <li><a href="#Modifications">Modifications</a></li>
+  </ul>
+  <hr>
+
+  <h2>1 <a name="Introduction">Introduction</a></h2>
+
+	<p>This document has been stabilized, however the discussion of issues in this document 
+	remains relevant, although the specific XML format is not commonly used. For 
+	example, the <a href="http://site.icu-project.org/charts/charset">Unicode 
+	ICU project uses conversion data files</a> in a different format, as does 
+	the <a href="https://encoding.spec.whatwg.org/">W3C Encoding specification</a>.</p>
+	<p>In addition, newer resources such as
+	<a href="http://www.unicode.org/reports/tr36/">UTR #36</a>, Unicode Security 
+	Considerations, [<a href="http://www.unicode.org/reports/tr22/#Unicode">Unicode</a>] 
+	Section 3.9, Unicode Encoding Forms (especially definition D93 Encoding form 
+	conversion), and [<a href="http://www.unicode.org/reports/tr22/#Unicode">Unicode</a>] Section 5.22, Best Practice for 
+	U+FFFD Substitution, expand on many of the issues discussed here.</p>
+
+  <p>The ability to seamlessly handle multiple languages 
+  and writing systems character encodings is crucial in
+  today's world, where a server may need to handle many different client 
+  languages covering many different markets. No matter how characters
+  are represented, servers need to be able to process them appropriately.
+  Unicode provides a common model and representation of characters for all the
+  languages of the world. Because of this, Unicode has 
+  been adopted by all modern systems as the internal storage processing code. Rather than trying to
+  maintain data in literally hundreds of different encodings, a program can
+  convert the source data into Unicode on entry, 
+  process it as required, and, if needed, convert it into a target character set on request.</p>
+  <p>It is  vital to maintain the
+  consistency of data across conversions between different character encodings.
+  Because of the fluidity of data in a networked world, it is easy for it to be
+  converted from, say, CP950 on a Windows platform, sent to a UNIX server as
+  UTF-8, processed, and converted back to CP950 for representation on another
+  client machine. This requires implementations to have identical mappings for a
+  character encoding, no matter what platform they are working on. It also
+  requires them to use the <i>same</i> name for the same encoding, and <i>different</i>
+  names for different encodings. This is difficult to do unless there is a
+  standard specification for the mappings so that it can be precisely determined
+  what the encoding actually maps to.</p>
+  <p>This technical report provides  a standard specification for the  
+  interchange of mapping data for character encodings. By using this  
+  specification, implementations on any platform can be assured of providing precisely the same mappings as all other implementations, 
+  regardless of platform. The  
+  use of CharMapML in and of itself does not guarantee that the result of a  
+  mapping is in a Unicode Encoding Form.</p>  
+  <p>The DTD does not specify valid documents. It is 
+  insufficient for the specification of all of the constraints on CharMapML 
+  files. The constraints are fully specified in this Unicode Technical Standard.</p>
+  <h3>1.1 <a name="Illegal_and_Unassigned">Illegal and Unassigned Codes</a></h3>
+  <p>When converting data between different character encodings, the conversion 
+  software needs to distinguish the different types of errors that 
+  can occur. These 
+  fall into three main categories: sequences that are illegal, unassigned and 
+  unmappable.</p>
+  <p>There are two variants when the sequence is <i>illegal.</i> In the first
+  variant, the sequence is <i>incomplete</i>. For example, </p>
+      <ul>
+        <li>0xA3 is incomplete in CP950. Unless followed by another byte of the right form, it is
+              illegal.</li>
+        <li>0xC2 is incomplete in UTF-8. Unless followed by another value of the right form, it is 
+              illegal.</li>
+        <li>0x80 is incomplete in UTF-8. Unless preceded by another value of the right form, it is 
+              illegal.</li>
+      </ul>
+      The second variant is where the sequence is complete, but explicitly                    
+      illegal. For example,                    
+      <ul>
+        <li>0xC0 is illegal in UTF-8. This value can never occur in valid UTF-8 
+          text.</li>
+      </ul>
+  In the second category, the source sequence represents a valid code point, but is <i>unassigned</i>                    
+      (also known as <i>undefined</i>). This sequence may be given an assignment in some                    
+      future version of the character encoding.                    
+      For example, 0xA3 0xBF is unassigned in CP950, as of 1999. 0x0EDE is unassigned in Unicode, V3.0<p>                    
+  In the third category, the source sequence is assigned, but <i>unmappable:</i> there is no
+      corresponding code point in the target encoding to accurately represent
+      the source sequence.
+      For example, the long dash is assigned in Unicode, but cannot be mapped to
+          ISO-8859-1.</p>
+  <p>In the case of illegal source sequences, a conversion routine will
+  typically provide three options. It may stop with an error (or throw an exception).
+  Secondly, it may skip the source sequence. While this is commonly an option, it can also hide corruption
+          problems in the source text. Lastly, it may map to a substitution character such as the Unicode REPLACEMENT CHARACTER (U+FFFD).</p>
+  <p>When a conversion routine stops with an error, the routine should
+  communicate the cause of the error and the length and contents of the bad
+  sequence. It should be possible to resume the conversion after the
+  caller handles the bad sequence.</p>
+      <p>There is an important difference between the case where a
+    sequence represents a real REPLACEMENT CHARACTER in a legacy encoding, as
+    opposed to just being unassigned, and thereby mapped to REPLACEMENT
+    CHARACTER (using an API substitution option). </p>
+    <p>An API may choose to signal an illegal sequence in a legacy
+    character set by mapping it to a <a href="http://www.unicode.org/glossary/#noncharacter">noncharacter</a> code
+    point (Definition D7b in the Unicode Standard), such as U+FFFF. However, this
+    mechanism runs the risk of these values being transmitted in Unicode text
+    (which is thus non-conformant), and should be used with caution. </p>
+  <p>Unassigned sequences can be handled with any of the above options, plus
+  some additional ones. They should always be treated as a single code point:
+  for example, 0xA3BF is treated as a single code point when mapping into
+  Unicode from CP950. Especially because unassigned characters may actually come
+  from a more recent version of the character encoding, it is often important to
+  preserve round-trip mappings if possible. This can be done by mapping to private use space. Unicode (and some other character encodings) provide a large area
+          of Private Use characters. These can be used to provide round-trip
+          mappings for private use characters from other character encodings, as
+          well as provisional mappings for characters that have not yet been
+          encoded in Unicode. A second option is to represent unassigned
+  sequences by hex escape sequences. For example, when mapping from U+1234 to other code pages, it can be
+          represented by &quot;&amp;#x1234;&quot; in XML or HTML,
+          &quot;\u1234&quot; in Java, C99 or C++, or &quot;\x{1234}&quot; in
+          Perl.</p>
+  <p>For unmappable sequences, an additional 
+  option of mapping to a fallback character sequence may be available. In this case, an unmappable sequence is given a &quot;best fit&quot; 
+          mapping. For example, an encoding might not have curly quotes; the 
+          generic quotes could be used as a fallback; or if EM DASH is 
+          unmappable, a sequence of two HYPHEN-MINUS characters could be used as 
+          a fallback.</p> 
+  <p>It is important that systems be able to distinguish between the 
+  fallback mappings and regular mappings. Systems like XML allow the use of decimal or 
+  hexadecimal escape sequences (Numeric Character References) to preserve round-trip integrity; use of fallback 
+  characters in that case corrupts the data.</p> 
+  <p>Because illegal sequences represent some corruption of the data stream,
+  conversion routines may be directed to handle them differently than unassigned
+  or unmappable sequences. For example, a routine might map an unassigned
+  sequence
+  to a substitution character, but throw an exception when it encounters an illegal
+  sequence.</p>
+  <h4>1.1.1 <a name="Best-Fit_Mappings">Best-Fit Mappings</a></h4>
+  <p>In cases where a specified character mapping table is not available, a best-fit mapping table can be used.
+  This
+  technique should be used with caution because data can be corrupted.
+  For example, in XML there are different strategies depending on whether the
+  process is parsing or generating.</p>
+  <blockquote>
+    <p>Suppose that there are two sets X and SUB_X, where X is a superset of
+    SUB_X. (That is, every roundtrip mapping that is in SUB_X is also in X, and
+    X may contain additional round-trip mappings.) Then:</p>
+    <ul>
+      <li>It is acceptable to parse with X when the file is tagged as SUB_X.
+      Because X is
+        a superset, all the characters will be read correctly. Any characters
+        that are not in SUB_X will be encoded as NCRs (for example, &amp;#xABCD;), and
+        will work.</li>
+      <li>It is acceptable to generate the file with SUB_X, and tag the file as X.
+      Everything works as
+        long as the characters that are not in SUB_X are converted into NCRs.</li>
+      <li>It is NOT acceptable to parse with SUB_X when the file is tagged with X
+        because characters will be corrupted.</li>
+      <li>It is NOT acceptable to generate the file with X, and tag the file with SUB_X
+      because characters will be corrupted.</li>
+    </ul>
+  </blockquote>
+  <p>Therefore, looking up a best-fit character mapping needs to yield different 
+  results depending on whether a subset or a superset is required. <a href="#Names">Section 
+  4</a>, <i>Alias Table Format</i> describes data that can be used for this.</p> 
+  <h4>1.1.2 <a name="Dual_Substitution_Handling">Dual Substitution Handling</a></h4>
+  <p>Some mapping tables for multibyte code pages define an additional, alternate
+  code page substitution character &quot;subchar1&quot; which is always a
+  single-byte code. In this case, the regular substitution character is always a
+  double-byte code. These mapping tables then also list  which unassigned code points should map to this alternate subchar1 instead of
+  to the regular substitution character.</p>
+  <p>The XML character mapping table format provides for the specification of the
+  &quot;subchar1&quot; byte sequence as a <a class="charclass" href="#att_sub1">sub1</a> <i>attribute</i> of the <a class="charclass" href="#elem_assignments">assignments</a>
+  element, and for the use of <a class="charclass" href="#elem_sub1">sub1</a> <i>elements</i> to specify which Unicode code
+  points should map to &quot;subchar1&quot; instead of to the regular
+  substitution character.</p>
+  <p>Usage:</p>
+  <p>In this context characters are thought of as being &quot;wide&quot; or
+  &quot;narrow.&quot; In legacy code pages, this is identified with the codes
+  being single-byte or double-byte codes.</p>
+  <p>In mappings between two legacy code pages: When a wide (double-byte)
+  character is unassigned, it results in a double-byte substitution character.
+  When a narrow (single-byte) character is unassigned, it results in a
+  single-byte &quot;subchar1&quot;.</p>
+  <p>This is emulated in mapping tables by declaring the additional &quot;subchar1&quot;, and by adding one-way mappings from Unicode to the code page-&quot;subchar1&quot;
+      where desired for &quot;narrow&quot; characters. When a
+  &quot;subchar1&quot; is specified, then conversion routines use U+001A as a &quot;Unicode subchar1.&quot;</p>
+  <p>Typically, all unassigned Latin-1 characters (Unicode code points
+  U+0000-U+00FF) have
+  subchar1 mappings, but  some other code points do also.</p>
+  <p>This means that when one converts from Unicode to such a code page and finds an
+      unassigned code point, then if a &quot;subchar1&quot; mapping is defined for this code point,
+          output the &quot;subchar1&quot; byte sequence, otherwise output the regular substitution character.
+  When one converts from such a code page to Unicode and finds an
+      unassigned code, then if the input sequence is of length 1 <em>and</em> a
+          &quot;subchar1&quot; is specified for the code page, output U+001A, otherwise output
+  U+FFFD.</p>
+  <p>Some converter implementations seem to not distinguish between
+  roundtrip/fallback/subchar[1] and just include the desired default results in the runtime mapping tables.</p>
+  <h3>1.2 <a name="Completeness">Completeness</a></h3>
+  <p>It is important that a mapping file be a complete description. Using the
+  data in the file, it must be possible to tell
+  whether any sequence of bytes is assigned, unassigned, or illegal. It must also be
+  possible to tell if characters need to be rearranged to be in Unicode standard
+  order (visual order, combining marks after base forms, etc). In addition,</p>
+  <ul>
+    <li>All mappings for control characters
+      (C0 controls, DELETE, and C1 controls; U+0000..U+001F and U+007F..U+009F)
+      must be explicitly listed if these characters are mapped.</li>
+    <li>All legacy private use (for example, user defined) characters must be explicitly
+      mapped, either to the private use zone in Unicode, or to the correct
+      characters outside of that zone.</li>
+    <li>Only a real legacy replacement character can be mapped explicitly to
+      REPLACEMENT CHAR in the body of the mapping table; unassigned characters
+      must not be mapped <i>explicitly</i> to it. (They may be mapped implicitly
+      in conversion, depending on conversion parameters.)</li>
+    <li>Similarly, when mapping from Unicode to a code page, only the REPLACEMENT CHAR
+      (or U+001A in a table with <a href="#Dual_Substitution_Handling">Dual Substitution Handling</a>)
+      can be mapped to SUBSTITUTE or other legacy equivalent.</li>
+    <li>Incomplete sequences and other illegal sequences must be explicitly
+      indicated.</li>
+    <li>All fallback mappings must be clearly indicated. This is especially
+      important for modern software that guarantees round-trip conversion to and
+      from Unicode.</li>
+  </ul>
+  <p>If two byte sequences are considered to be duplicate encodings, then they
+  can map to the same Unicode value, in which case one of them is a fallback.</p>
+  <div align="center">
+    <center>
+    <table border="0" cellspacing="0" cellpadding="2">
+      <tr>
+        <th>Legacy</th>
+        <th></th>
+        <th>Unicode</th>
+      </tr>
+      <tr>
+        <td align="center" valign="top"><font size="5">X</font></td>
+        <td><img alt="?" border="0" src="NWSE-arrow.gif" width="117" height="47"></td>
+        <td align="center" rowspan="2"><font size="5">X</font></td>
+      </tr>
+      <tr>
+        <td align="center" valign="bottom"><font size="5">X'</font></td>
+        <td><img alt="?" border="0" src="NE-arrow.gif" width="117" height="41"></td>
+      </tr>
+    </table>
+    </center>
+  </div>
+  <p>If they are not, they must map to distinct Unicode values (for example, using a
+  private use
+  character). Otherwise data would be lost when converting to and from
+  Unicode.</p>
+  <div align="center">
+    <center>
+    <table border="0" cellspacing="0" cellpadding="2">
+      <tr>
+        <th>Legacy</th>
+        <th></th>
+        <th>Unicode</th>
+      </tr>
+      <tr>
+        <td align="center" valign="top"><font size="5">X</font></td>
+        <td><img alt="?" border="0" src="EW-arrow.gif" width="124" height="32"></td>
+        <td align="center"><font size="5">X</font></td>
+      </tr>
+      <tr>
+        <td align="center" valign="bottom"><font size="5">X'</font></td>
+        <td><img alt="?" border="0" src="EW-arrow.gif" width="124" height="32"></td>
+        <td align="center"><font size="5">X' (Private Use)</font></td>
+      </tr>
+    </table>
+    </center>
+  </div>
+  <p>If a future version of Unicode incorporates a character that was
+  represented by a private use character, the mapping should be changed as follows:</p>
+  <h4>Old Version</h4>
+  <div align="center">
+    <center>
+    <table border="0" cellspacing="0" cellpadding="2">
+      <tr>
+        <th>Legacy</th>
+        <th></th>
+        <th>Unicode</th>
+      </tr>
+      <tr>
+        <td align="center"><font size="5">X'</font></td>
+        <td><img alt="?" border="0" src="EW-arrow.gif" width="124" height="32"></td>
+        <td align="center"><font size="5">X' (Private Use)</font></td>
+      </tr>
+    </table>
+    </center>
+  </div>
+  <h4>New Version</h4>
+  <div align="center">
+    <center>
+    <table border="0" cellspacing="0" cellpadding="2">
+      <tr>
+        <th>Legacy</th>
+        <th></th>
+        <th>Unicode</th>
+      </tr>
+      <tr>
+        <td rowspan="2" align="center"><font size="5">X'</font></td>
+        <td><img alt="?" border="0" src="NESW-arrow.gif" width="117" height="47"></td>
+        <td valign="top" align="center"><font size="5">X'</font></td>
+      </tr>
+      <tr>
+        <td><img alt="?" border="0" src="NW-arrow.gif" width="117" height="41"></td>
+        <td valign="bottom" align="center"><font size="5">X' (Private Use)</font></td>
+      </tr>
+    </table>
+    </center>
+  </div>
+  <p>&nbsp;</p>
+  <h3>1.3 <a name="Canonical_Equivalence">Canonical Equivalence</a></h3>                    
+  <p>The Unicode Standard has two equivalent ways of representing accented characters such as <i>â</i>. The standard provides for two normalized formats                    
+  that provide for unique representations of data in <a href="http://www.unicode.org/reports/tr15/">UAX                    
+  #15: Unicode Normalization Forms</a> [<a href="#Normal">Normal</a>]. Where                    
+  possible, each code page character should be mapped to a precomposed Unicode                    
+  character, or to a Unicode sequence which is in Normalization Form C.                    
+  However, this does not guarantee that the result of the conversion of the                    
+  entire text into Unicode                    
+  will be normalized, because individual characters in the source encoding may                    
+  separately map to an unnormalized sequence.</p>                    
+      <p>For example, suppose the source encoding maps 0x83 to U+030A in Unicode (<i>combining
+    ring above</i>), and 0x61 to U+0061 (<i>a</i>). Then the sequence
+    &lt;0x61,0x83&gt; will map to &lt;U+0061, U+030A&gt; in Unicode, which is
+    not in Normalization Form C.</p>
+  <p>This situation will only arise when the source encoding has separate
+  characters that, in the proper context, would not be present in normalized
+  text. If a process wishes to guarantee that the result is in a particular
+  Unicode normalization form,  it should normalize after conversion. (See the
+  description of the <a class="charclass" href="#att_normalization">normalization</a> attribute of the <a class="charclass" href="#elem_characterMapping">characterMapping</a>
+  element below.)</p>
+  <h3>1.4 <a name="Charset_Alias_Matching">Charset Alias Matching</a></h3>
+  <p>Names and aliases of charsets are often spelled with small variations. To recognize accidental but unambiguous misspellings and  avoid adding
+  each possible variation to a list of recognized names, it is customary to
+  match names case-insensitively and to ignore some punctuation. For best
+  results,  names should be compared after applying the following
+  transformations:</p>
+  <ol>
+    <li>Delete all characters except a-z, A-Z, and 0-9.</li>
+    <li>Map uppercase A-Z to the corresponding lowercase a-z.</li>
+    <li>From left to right, delete each 0 that is not preceded by a digit.</li>
+  </ol>
+  <p>For example, the following names should match: &quot;UTF-8&quot;,
+  &quot;utf8&quot;, &quot;u.t.f-008&quot;, but not &quot;utf-80&quot; or
+  &quot;ut8&quot;.</p>
+  <p>
+  <b>Note:</b> These rules are in place because in practice
+  implementations are faced with many gratuitous variations
+  in the use and omission of punctuation.
+  There are a small number of IANA names for different charsets
+  that match under these rules, but they appear to be rarely used, obscure charsets:
+  "iso-ir-9-1" and "iso-ir-9-2" match "iso-ir-91" and "iso-ir-92", respectively.
+  (There are also names in the IANA charset registry that violate the registry's own name syntax rules.)
+  </p>
+  <h2>2 <a name="Conformance">Conformance</a></h2>
+  <p>There are many different ways to describe character mapping
+  tables and alias tables, and the Unicode Standard does not restrict the ways
+  in which implementations can do this. However, any Unicode-conformant
+  implementation that purports to implement this specification must do so as
+  described in the following clause. Implementations are free to deviate from
+  this, as long as they do not purport to conform to this specification.</p>
+    <table class="noborder" cellSpacing="0" cellPadding="4" border="0" id="table1">
+      <tr>
+        <td class="noborder" vAlign="top">C1</td>
+        <td class="noborder">A character mapping table or alias table
+          that claims conformance to this standard
+          must be a well-formed XML document and must be valid according to the
+          CharacterMapping DTD described in the next section.
+        </td>
+      </tr>
+      <tr>
+        <td class="noborder" vAlign="top">C2</td>
+        <td class="noborder">A character mapping table
+          that claims conformance to this standard
+          must specify valid assignments; in particular, valid Unicode code points,
+          and byte sequences that conform to the table's validity specification.
+        </td>
+      </tr>
+      <tr>
+        <td class="noborder" vAlign="top">C3</td>
+        <td class="noborder">Conformance to this specification requires conformance to Unicode
+          2.0.0 or later.
+        </td>
+      </tr>
+    </table>
+  <h2>3 <a name="XML_Format">Character Mapping Table Format</a></h2>
+  <p>A character mapping specification file starts with the following lines. 
+  Note that there is a difference between the encoding of the XML file, and the 
+  encoding of the mapping data. The encoding of the file can be any valid XML 
+  encoding. Only the characters in the ASCII   repertoire are required in the specification of the mapping data, but 
+  the full repertoire of the mapping file's encoding may be used in comments and 
+  in attribute values (where permitted by the specification). The example below happens to use UTF-8.</p> 
+  <pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+&lt;!DOCTYPE characterMapping
+
+  SYSTEM &quot;http://www.unicode.org/reports/tr22/CharacterMapping.dtd&quot;&gt;</pre>
+
+    <p>In the rest of this specification, very short attribute and
+    element names are used just to conserve space where there may be a large
+    number of items, or for consistency with other elements that may have a
+    large number of items.</p>
+
+  <h3>3.1 <a name="Header">Header</a></h3>
+  <p>A mapping file begins with a header. The following is not a real-world
+  example but illustrates all of the attributes:</p>
+  <pre>&lt;characterMapping
+ id=&quot;windows-1252-2000&quot;
+ version=&quot;2&quot;
+ description=&quot;Code page for Western Europe&quot;
+ contact=&quot;mailto:somebody@example.com&quot;
+ registrationAuthority=&quot;Microsoft&quot;
+ registrationName=&quot;cp1252&quot;
+ copyright=&quot;Microsoft&quot;
+ bidiOrder=&quot;logical&quot;
+ normalization=&quot;NFC&quot;
+&gt;</pre>
+  <p>The element <a class="charclass" href="#elem_characterMapping" name="elem_characterMapping">characterMapping</a> (required) is the root. It contains a number of 
+  attributes:</p>
+  <p class="dtd">&lt;!ELEMENT characterMapping (history?, ((validity|stateful_siso), assignments)|iso2022)><br>                 
+  <br>
+  &lt;!ATTLIST characterMapping<br>                 
+  &nbsp;&nbsp;&nbsp; id CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; version CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; description CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; contact CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; registrationAuthority CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; registrationName CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; copyright CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; bidiOrder (logical|RTL|LTR) "logical"<br>                 
+  &nbsp;&nbsp;&nbsp; combiningOrder (before|after) "after"<br>                 
+  &nbsp;&nbsp;&nbsp; normalization (undetermined|neither|NFC|NFD|NFC_NFD) "undetermined"<br>                 
+  ></p>
+  <p>The attribute <a class="charclass" href="#att_id" name="att_id">id</a> (required) gives a canonical identifier which uniquely
+  distinguishes this
+  mapping table from all others. This identifier has the form: &lt;source&gt;-&lt;name_on_source&gt;-&lt;version&gt;,
+  such as &quot;iso-8859-1999&quot;. The identifier syntax was chosen so that the resulting string can be
+    used as a filename on most systems.</p>
+  <table border="1">
+    <tr>
+      <td>&lt;source&gt;</td>
+      <td>Name of standards authority, government, vendor, or product</td>
+    </tr>
+    <tr>
+      <td>&lt;name_on_source&gt;</td>
+      <td>Most common name used on source. If the name is used ambiguously on
+      the source, it should be qualified for uniqueness: for example,
+        &quot;cp936_Alt1&quot;</td>
+    </tr>
+    <tr>
+      <td>&lt;version&gt;</td>
+      <td>Version number, typically the first year the encoding was introduced.
+        If this is not sufficient for uniqueness, an additional letter can be
+        appended: &quot;1999a&quot;, &quot;1999b&quot;, etc.</td>
+    </tr>
+  </table>
+  <p>All three fields must be present, except in the case of Unicode encodings, which do not need a version field. Fields are limited to ASCII 
+  letters, digits and &quot;_&quot;. Any other characters should be converted to 
+  &quot;_&quot; or letters. The <a class="charclass" href="#att_id">id</a> value is matched leniently as 
+  recommended for all charset names, see <a href="#Charset_Alias_Matching">Section 
+  1.4</a>, <i>Charset Alias Matching</i>. It must be unique; if two mapping tables differ in the mapping of any 
+  characters, in the specification of illegal characters, in their bidi 
+  ordering, in their combining character ordering, and so on, then their identifiers must not 
+  match according to the algorithm in <a href="#Charset_Alias_Matching">Section 
+  1.4</a>, <i>Charset Alias Matching</i>.</p> 
+
+    <p>If a source only has one name for two mappings that differ by 
+    bidi-order, one must be given a qualification. For example, &quot;cp543_RTL&quot; 
+    (see below).</p> 
+  <p>Different organizations may assign different <a class="charclass" href="#att_id">id</a>              
+  values for the same mapping table, for example, if they happen to choose             
+  different names for the same source or happen to document the same mapping             
+  table from different sources.&nbsp;</p>            
+
+    <p>These identifiers are <i>not</i> meant to compete with the <a href="http://www.iana.org/assignments/character-sets">IANA            
+    character set registry</a> [<a href="#IANA">IANA</a>], which is the most            
+    useful collection of cross-platform names available. Future registration            
+    of many of these mappings  with IANA seems likely because the            
+    current usage of IANA names is not sufficiently precise. For example,  many character set mappings advertise themselves as being            
+    &quot;Shift-JIS&quot;, but actually have different mappings to and from            
+    Unicode on different platforms.</p>            
+
+  <p>Some sources do not rename a character set when they add mappings by
+  providing mappings for characters that were either previously unmapped or mapped to private use characters. These added mappings can be
+  incorporated into the same mapping file, using a <a class="charclass" href="#att_version">version</a> attribute (see
+  below). If only additions are made, then the same identifier can be retained. However,
+  if mappings are changed in ways other than pure additions, then a new identifier
+  <i>must</i> be used. Any change in the validity of character sequences also
+  requires a new identifier.</p>
+  <p>The attribute <a class="charclass" href="#att_version" name="att_version">version</a> (required)
+  specifies the version of the data, a small integer
+  normally starting at one. Any time the data is modified, the value must be
+  increased.</p>
+  <p>The attribute <a class="charclass" href="#att_description" name="att_description">description</a> (optional) contains a string which describes the mapping
+  enough to distinguish it from other similar mappings. This string must be
+  limited to the Unicode range U+0020 - U+007E and should be in English. The
+  string normally contains the set of mappings, the script, language, or locale
+  for which it is intended, and optionally the variation. For instance,
+  &quot;Windows Japanese JIS-1990&quot;, &quot;EBCDIC Latin 1 with Euro&quot;,
+  &quot;PC Greek&quot;.</p>
+  <p>The attribute <a class="charclass" href="#att_contact" name="att_contact">contact</a> (optional) provides the person to contact in case errors are found
+  in the data. This must be a URL.</p>
+  <p>The attribute <a class="charclass" href="#att_registrationAuthority" name="att_registrationAuthority">registrationAuthority</a> (optional) indicates the organization responsible for
+  the encoding.</p>
+  <p>The attribute <a class="charclass" href="#att_registrationName" name="att_registrationName">registrationName</a> (optional) contains a string that provides the name and
+  version of the mapping, as known to that authority.</p>
+  <p>The attribute <a class="charclass" href="#att_copyright" name="att_copyright">copyright</a> (optional) provides the copyright information. While this
+  can be provided in comments, use of an attribute allows copyright propagation
+  when converting to a binary form of the table. (Typically the right to use the
+  information is granted, but not the right to erase the copyright or imply that
+  the implementer created the information.)</p>
+
+  <p>The attribute <a class="charclass" href="#att_bidiOrder" name="att_bidiOrder">bidiOrder</a> (optional) specifies whether the character encoding is to
+  be interpreted in one of three orders: &quot;RTL&quot;, &quot;LTR&quot;, or
+  &quot;logical&quot;. Unicode text is always stored and processed in<i> logical
+  order</i> (basically keystroke order). Application of the Unicode
+  Bidirectional Algorithm is required to map to a visual-order character
+  encoding; application of a reverse bidirectional algorithm is required to map
+  back to Unicode. The default value for this attribute is &quot;logical&quot;.
+  It is only relevant for character encodings for the Arabic and Hebrew. For more information, see <a href="http://www.unicode.org/reports/tr9/">UAX
+  #9: The Bidirectional Algorithm</a> [<a href="#BIDI">BIDI</a>]. If mapping
+  tables differ only in <a class="charclass" href="#att_bidiOrder">bidiOrder</a>,
+  this should be reflected in the &lt;name_from_source&gt;,
+  for example, &quot;cp999&quot;, &quot;cp999_RTL&quot;, &quot;cp999_LTR&quot;.</p>
+
+  <p>The attribute <a class="charclass" href="#att_normalization" name="att_normalization">normalization</a> (optional)
+  specifies whether the result of conversion 
+  into Unicode using this mapping will be automatically in Normalization Form C 
+  or D. The possible values are &quot;<b>undetermined</b>&quot; (the default), 
+  &quot;<b>neither</b>&quot;, &quot;<b>NFC</b>&quot;, &quot;<b>NFD</b>&quot;, or 
+  &quot;<b>NFC_NFD</b>&quot;. While this information can be derived from an 
+  analysis of the assignment statements (see <a href="http://www.unicode.org/reports/tr15/">UAX 
+  #15: Unicode Normalization Forms</a> [<a href="#Normal">Normal</a>]), providing 
+  the information in the header is a useful validity check, and saves 
+  processing. Most mappings specifications will have the value &quot;NFC&quot;. 
+  Character encodings that contain neither composite characters nor combining 
+  marks (such as 7-bit ASCII) will have the value &quot;NFC_NFD&quot;.
+  For example,
+  ISO Arabic is &quot;<b>neither</b>&quot; (because of the order of multiple combining marks)
+  and ISO Latin-1 is &quot;<b>NFC</b>&quot;.</p>
+  <p><b>Note:</b>
+  Any charset that contains combining marks with different, non-zero values
+  for the Canonical_Combining_Class property
+  cannot be marked either as &quot;<b>NFC</b>&quot; or as &quot;<b>NFD</b>&quot;.</p>
+
+  <p>The attribute <a class="charclass" href="#att_combiningOrder" name="att_combiningOrder">combiningOrder</a> (optional)
+  specifies whether combining marks are stored after their base character
+  (as in Unicode) or before their base character (as in some legacy charsets).</p>
+      <h3>3.2 <a name="History">History</a></h3>
+  <pre> &lt;history&gt;
+  &lt;modified version=&quot;2&quot; date=&quot;1999-09-25&quot;&gt;
+   Added Euro.
+  &lt;/modified&gt;
+  &lt;modified version=&quot;1&quot; date=&quot;1997-01-01&quot;&gt;
+   Made out of whole cloth for illustration.
+  &lt;/modified&gt;
+ &lt;/history&gt;</pre>
+  <p>The element <a class="charclass" href="#elem_history" name="elem_history">history</a> (optional) provides information about the changes to the 
+  file and relations to other encodings.</p> 
+  <p class="dtd">&lt;!ELEMENT history (modified+)></p> 
+  <p>The element <a class="charclass" href="#elem_modified" name="elem_modified">modified</a> provides information about the changes to the file,   
+  coordinated with the <a class="charclass" href="#att_version">version</a>. The latest <a class="charclass" href="#att_version">version</a> should be first. 
+  The <a class="charclass" href="#att_version">version</a>  attribute of the 
+  element <a class="charclass" href="#elem_modified">modified</a>  
+  has the same format as that of the <a class="charclass" href="#elem_characterMapping">characterMapping</a>  
+  element. The <a class="charclass" href="#att_date" name="att_date">date</a> attribute value must be  
+  in ISO 8601 format (yyyy-mm-dd).</p>  
+  <p class="dtd">&lt;!ELEMENT modified (#PCDATA)&gt;<br>                
+  &lt;!ATTLIST modified<br>                 
+  &nbsp;&nbsp;&nbsp;    version CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp;    date CDATA #REQUIRED<br>                 
+  ></p>
+  <h3>3.3 <a name="Validity_Specification">Validity Specification</a></h3>
+  <p>As discussed above, it is important to be able to distinguish whether 
+  sequences are valid (assigned or unassigned) or invalid (illegal). Valid sequences are specified by the <a class="charclass" href="#elem_validity" name="elem_validity">validity</a> 
+  element; all other sequences are invalid.</p> 
+  <p class="dtd">&lt;!ELEMENT validity (state+)></p> 
+  <p>Here is an example of 
+  what this might look like, for the validity specification for Microsoft's SJIS 
+  (&quot;windows-932-2000&quot;):</p>
+  <pre>&lt;validity&gt;
+  &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;00&quot; e=&quot;80&quot; /&gt;
+  &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;A0&quot; e=&quot;DF&quot; /&gt;
+  &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;FD&quot; e=&quot;FF&quot; /&gt;
+  &lt;state type=&quot;FIRST&quot; next=&quot;LAST&quot; s=&quot;81&quot; e=&quot;9F&quot; /&gt;
+  &lt;state type=&quot;FIRST&quot; next=&quot;LAST&quot; s=&quot;E0&quot; e=&quot;FC&quot; /&gt;
+  &lt;state type=&quot;LAST&quot; next=&quot;VALID&quot; s=&quot;40&quot; e=&quot;7E&quot; /&gt;
+  &lt;state type=&quot;LAST&quot; next=&quot;VALID&quot; s=&quot;80&quot; e=&quot;FC&quot; max=&quot;FFFF&quot;/&gt;
+&lt;/validity&gt;</pre>
+  <p>The subelements are <a class="charclass" href="#elem_state" name="elem_state">state</a>s. Their attributes are listed here.</p> 
+  <p class="dtd">&lt;!ELEMENT state EMPTY><br>                 
+  &lt;!ATTLIST state<br>                 
+  &nbsp;&nbsp;&nbsp; type CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; next CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; s CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; e CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; max CDATA #IMPLIED<br>                 
+  ></p>
+  <p>The attribute
+  <a class="charclass" href="#att_type" name="att_type">type</a> (required) specifies the type of the given bytes. The one
+    distinguished value for this attribute is <b>FIRST</b>. Other values can be
+      assigned, as long as they do not cause an error condition, as listed below.</p>
+  <p>The attribute <a class="charclass" href="#att_s" name="att_s">s</a> (required) specifies the start of the byte range.
+  <p>The attribute <a class="charclass" href="#att_e" name="att_e">e</a> (optional) specifies the end of the byte range. A missing value is interpreted as being the same as the value for
+  the <a class="charclass" href="#att_s">s</a>
+  attribute (thus is a range with one single value).
+<p>The attribute
+  <a class="charclass" href="#att_next" name="att_next">next</a> (required) specifies the resulting type. There are three distinguished
+  values. Other values (identifiers) can be freely chosen, as long as they do not
+      cause an error condition.
+  <p>The distinguished values are <b>VALID</b>, <b>INVALID</b>, and <b>UNASSIGNED</b>.
+  <b>VALID</b> indicates valid completion and is the default value for the state
+  element. <b>INVALID</b> indicates that the sequence is invalid. <b>UNASSIGNED</b> indicates that the sequence is valid, but that
+          none of the matching byte sequences are assigned.</p>
+  <p>The attribute
+  <a class="charclass" href="#att_max" name="att_max">max</a> (optional) can only occur if the <a class="charclass" href="#att_next">next</a> value is <b>VALID</b>.
+      Its value must be greater or equal to the largest possible Unicode code point for
+      any matching byte sequence.</p>
+  <p>For a pure definition of the mapping tables, neither <a class="charclass" href="#att_max">max</a> nor
+  <b>UNASSIGNED</b> or <b>INVALID</b>
+  are necessary.
+  <a class="charclass" href="#att_max">max</a> and <b>UNASSIGNED</b>
+  could both be determined by analyzing the assignment
+  statements in the table. However, their inclusion allows implementations to
+  optimize their internal tables.
+  <b>INVALID</b> can be used as explicit documentation of invalid byte sequences.</p>
+  <p>All values referring to code units are hexadecimal. Looking at the above 
+  table, the first three lines show that the single bytes 00-80, A0-DF, FD-FF 
+  are legal. The next two lines say that the bytes in the ranges 81-9F and 
+  E0-FC are legal, <i>if</i> they are followed by a byte of <a class="charclass" href="#att_type">type</a>=<b>&quot;LAST&quot;</b>. 
+  The next two lines show that the LAST byte must be in 40-7E, 80-FC More 
+  detailed samples for a complex validity specification are given in <a href="#Samples">Section 
+  5</a>, <i>Samples</i>.</p>
+  <p>
+    <b>Note:</b> The byte sequences in assignment statements are a <i>subset</i>
+    of the valid byte sequences. There can be 0, a few, or very many valid
+    byte sequences that are not listed in assignment elements.
+    <b>UNASSIGNED</b> can be used to optimize internal tables.
+  </p>
+  <p>The validity specification is interpreted by setting the current state to <b>FIRST</b>,
+  and using the following process:</p>
+  <ul>
+    <li>Fetch a byte.</li>
+    <li>From the current state and that byte, find the <a class="charclass" href="#att_next">next</a> value.</li>
+    <li>If it is <b>VALID</b>, then the sequence is valid.</li>
+    <li>If it is <b>INVALID</b> or there is no state, then the sequence is
+      invalid.</li>
+    <li>Otherwise set the current state to the <a class="charclass" href="#att_next">next</a> value.</li>
+  </ul>
+  <p>The following is a sample of how this could be implemented in Java. It
+  would be very similar in C or C++ except that <a class="charclass" href="#att_type">type</a> would be an
+  output parameter and not an array, and the mask with <code>0xFF</code> is
+  unnecessary if byte is a typedef for <code>unsigned char</code>.</p>
+  <table class="wide" border="1">
+    <caption>Sample Validity Checking</caption>
+    <tr>
+      <td width="100%">
+        <pre>/**
+* Checks byte stream for validity
+* @return number of valid bytes, and sets a flag.
+* @param type VALID, INVALID, PARTIAL indicates invalid sequence.
+* PARTIAL occurs at the end of a buffer, and indicates that a new buffer needs to be loaded.
+* If there are no more bytes, it is equivalent to INVALID.
+* @param length the number of bytes up to &lt;b&gt;and including&lt;/b&gt; the final byte
+* that caused the problem.
+*/
+
+
+
+public int check(byte[] source, int position, int limit, byte[] type) {
+  int p = position;
+  byte state = FIRST;
+
+  try {
+    while (p &lt; limit) {
+      state = stateMap[state][source[p++] &amp; 0xFF]; // mask in Java
+      if (state &lt; FIRST) { // VALID and INVALID are negative values
+        type[0] = state;
+        return p-position;
+      }
+    }
+  } catch (ArrayIndexOutOfBoundsException e) {} // fall through
+
+  type[0] = (state &lt; FIRST) ? state : PARTIAL;
+  return p - position;
+}
+
+static final byte FIRST = 0;</pre>
+      </td>
+    </tr>
+  </table>
+
+  <h4><a name="Validity_Error_Conditions">3.3.1 Error Conditions</a></h4>
+  <p>The following describes conditions under which a validity specification is
+  invalid.</p>
+  <ul>
+    <li>Two <a class="charclass" href="#elem_state">state</a> elements conflict if they have the same <a class="charclass" href="#att_type">type</a> and
+      their byte ranges intersect.</li>
+    <li>If a <a class="charclass" href="#att_type">type</a> attribute has the value <b>VALID</b>, <b>UNASSIGNED</b>,
+      or <b>INVALID</b>, then it conflicts.</li>
+    <li>If there is a <a class="charclass" href="#att_type">type</a> value&nbsp; (other than <b>FIRST</b>) with no                    
+      matching <a class="charclass" href="#att_next">next</a> value in another element, the element is incomplete.</li>                    
+    <li>If there is a <a class="charclass" href="#att_next">next</a> value (other than <b>VALID</b> or <b>UNASSIGNED</b>)
+      with no matching <a class="charclass" href="#att_type">type</a> value in another element, the element is
+      incomplete.</li>
+    <li><i>If there are any conflicts or any incomplete elements, or if there is
+      not at least one valid byte sequence, the file is invalid.</i></li>
+  </ul>
+  <h4><a name="Simple_SI_SO-Stateful_Encodings">3.3.2 Simple SI/SO-Stateful
+  Encodings</a></h4>
+  <p>EBCDIC-based multi-byte encodings use exactly two states and change between
+  them with Shift-In and Shift-Out (SI/SO) ISO control codes. There are a few
+  ASCII-based SI/SO encodings as well. (As it happens, the byte values for SI
+  and SO are the same in EBCDIC and ASCII.)</p>
+  <p>Such stateful encodings are announced and tracked with a single CCSID (IBM
+  encoding ID) and are listed in the ICU Unicode conversion table repository [<a href="#ConvRef">Conv</a>]
+  with one single mapping table that lists mappings for both states. The
+  mappings are implicitly (and at runtime) distinguished by the number of
+  bytes per character: 1 in the initial state, and 2 in the other state. Note
+  that the double-byte lead byte ranges overlap a lot with the single-byte
+  codes.</p>
+  <p>These encodings are expressed in the XML character mapping tables by defining two 
+  validity specifications, one for the single-byte state, and one for the 
+  double-byte state. A <a class="charclass" href="#elem_stateful_siso" name="elem_stateful_siso">stateful_siso</a> element is used instead of the 
+  normal <a class="charclass" href="#elem_validity">validity </a>element, and <a class="charclass" href="#elem_stateful_siso">stateful_siso</a> itself 
+  contains two <a class="charclass" href="#elem_validity">validity</a> elements.</p> 
+  <p class="dtd">&lt;!ELEMENT stateful_siso (validity, validity)></p> 
+  <p>In the assignment elements below, the mappings for the two states need not
+  be in any particular order.</p>
+  <p>Example:</p>
+  <pre>  &lt;!-- EBCDIC Mixed SBCS/DBCS validity specification --&gt;
+  &lt;stateful_siso&gt;
+    &lt;!-- SBCS part --&gt;
+    &lt;validity&gt;
+      &lt;!-- all byte values are valid except for SI/SO, which are handled algorithmically --&gt;
+      &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;00&quot; e=&quot;0d&quot; /&gt;
+      &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;10&quot; e=&quot;ff&quot; /&gt;
+    &lt;/validity&gt;
+
+    &lt;!-- DBCS part --&gt;
+    &lt;validity&gt;
+      &lt;!-- DBCS space: 4040 --&gt;
+      &lt;state type=&quot;FIRST&quot; next=&quot;SPACE_LAST&quot; s=&quot;40&quot; /&gt;
+      &lt;state type=&quot;SPACE_LAST&quot; next=&quot;VALID&quot; s=&quot;40&quot; /&gt;
+
+      &lt;!-- DBCS characters other than space: 4141..FEFE --&gt;
+      &lt;state type=&quot;FIRST&quot; next=&quot;LAST&quot; s=&quot;41&quot; e=&quot;fe&quot; /&gt;
+      &lt;state type=&quot;LAST&quot; next=&quot;VALID&quot; s=&quot;41&quot; e=&quot;fe&quot; /&gt;
+    &lt;/validity&gt;
+  &lt;/stateful_siso&gt;
+</pre>
+  <h3>3.4 <a name="Assignments">Assignments</a></h3>
+  <p>The main part of the table provides the assignments of mappings between
+  byte sequences and Unicode characters. Here is an example:</p>
+  <pre> &lt;assignments sub=&quot;FC FC&quot; sub1=&quot;1A&quot;&gt;
+
+  &lt;!--Roundtrip mappings--&gt;
+  &lt;a b=&quot;A1&quot; u=&quot;FF61&quot; c=&quot;｡&quot; /&gt;
+  &lt;a b=&quot;A2&quot; u=&quot;FF62&quot; c=&quot;｢&quot; /&gt;
+  &lt;a b=&quot;A3&quot; u=&quot;FF63&quot; c=&quot;｣&quot; /&gt;
+  &lt;a b=&quot;A4&quot; u=&quot;E000&quot; /&gt;
+  &lt;a b=&quot;A4&quot; u=&quot;FF64&quot; c=&quot;､&quot; v=&quot;1995a&quot;/&gt;
+  &lt;a b=&quot;81 41&quot; u=&quot;3001&quot; c=&quot;、&quot; /&gt;
+  &lt;a b=&quot;81 42&quot; u=&quot;3002&quot; c=&quot;。&quot; /&gt;
+  &lt;a b=&quot;81 43&quot; u=&quot;FF0C&quot; c=&quot;，&quot; /&gt;
+  &lt;a b=&quot;81 44&quot; u=&quot;FF0E FF03&quot; c=&quot;．&quot; /&gt;
+
+  &lt;!--Fallbacks--&gt;
+  &lt;fub u=&quot;00A1&quot; b=&quot;21&quot; ru=&quot;0021&quot; c=&quot;¡&quot; rc=&quot;!&quot; /&gt;
+  &lt;fub u=&quot;00A2&quot; b=&quot;81 91&quot; ru=&quot;FFE0&quot; c=&quot;¢&quot; rc=&quot;￠&quot; /&gt;
+  &lt;fub u=&quot;00A3&quot; b=&quot;81 92&quot; ru=&quot;FFE1&quot; c=&quot;£&quot; rc=&quot;￡&quot; /&gt;
+  &lt;fub u=&quot;00A5&quot; b=&quot;5C&quot; ru=&quot;005C&quot; c=&quot;¥&quot; rc=&quot;\&quot; /&gt;
+  &lt;fub u=&quot;00A6&quot; b=&quot;7C&quot; ru=&quot;007C&quot; c=&quot;¦&quot; rc=&quot;|&quot; /&gt;
+  &lt;fub u=&quot;00A9&quot; b=&quot;63&quot; ru=&quot;0063&quot; c=&quot;©&quot; rc=&quot;c&quot; /&gt;
+
+  &lt;!--Reverse Fallbacks--&gt;
+  &lt;fbu u=&quot;00A6&quot; b=&quot;EE FA&quot; /&gt;
+  &lt;fbu u=&quot;2116&quot; b=&quot;87 82&quot; /&gt;
+
+  &lt;!--Unassigned code points using the sub1 code for substitution--&gt;
+  &lt;sub1 u=&quot;FFA0&quot; c=&quot;ﾠ&quot; /&gt;
+  &lt;sub1 u=&quot;FFA1&quot; /&gt;
+
+  &lt;!--Ranges--&gt;
+  &lt;range bFirst=&quot;90 30 81 30&quot; bLast=&quot;E3 32 9A 35&quot;
+    uFirst=&quot;10000&quot; uLast=&quot;10ffff&quot;
+    bMin=&quot;90 30 81 30&quot; bMax=&quot;E3 39 FE 39&quot;/&gt;
+
+ &lt;/assignments&gt;</pre>
+  <p>The element <a class="charclass" href="#elem_assignments" name="elem_assignments">assignments</a> 
+  contains a list of any number of <a class="charclass" href="#elem_a">a</a>, 
+  <a class="charclass" href="#elem_fub">fub</a>, <a class="charclass" href="#elem_fbu">fbu</a>, 
+  <a class="charclass" href="#elem_sub1">sub1</a>, or <a class="charclass" href="#elem_range">range</a> elements. It has two optional attributes: <a class="charclass" href="#att_sub">sub</a>, 
+  which specifies the replacement character used in the legacy character 
+  encoding (U+FFFD REPLACEMENT CHARACTER is used in Unicode), and <a class="charclass" href="#att_sub1">sub1</a>, 
+  which is IBM-specific and specifies a single-byte replacement character  for MBCS encodings with a multi-byte <a class="charclass" href="#att_sub">sub</a> value.</p> 
+  <p class="dtd">&lt;!ELEMENT assignments (a*, fub*, fbu*, sub1*, range*)><br> 
+  &lt;!ATTLIST assignments<br> 
+    sub NMTOKENS "1A"<br> 
+    sub1 NMTOKEN #IMPLIED<br> 
+  ></p>
+  <p>The value of the <a class="charclass" href="#att_sub" name="att_sub">sub</a> attribute is a sequence of bytes, as described under <a class="charclass" href="#att_b">b</a>
+  below. The default is the ASCII control value SUB = <b>&quot;1A&quot;</b>.</p>
+  <p>The value of the <a class="charclass" href="#att_sub1" name="att_sub1">sub1</a>  attribute is one byte; if it is missing, then the encoding uses 
+  only one replacement character (the character specified with <a class="charclass" href="#att_sub">sub</a>) for 
+  all code points. In addition, if <a class="charclass" href="#att_sub1">sub1</a> is specified, then conversion 
+  routines must use two Unicode replacement characters. For details see <a href="#Dual_Substitution_Handling">Section 
+  1.1.2</a>, <i>Dual Substitution Handling</i>.</p> 
+  <p>The element 
+  <a class="charclass" href="#elem_a" name="elem_a">a</a> specifies a mapping from byte sequences to Unicode and back. It has 
+  the following attributes:</p> 
+  <p class="dtd">&lt;!ELEMENT a EMPTY><br>                 
+  &lt;!ATTLIST a<br>                 
+  &nbsp;&nbsp;&nbsp; b NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; u NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; c CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; v CDATA #IMPLIED<br>                 
+  ></p>
+<blockquote>
+  The attribute   
+  <a class="charclass" href="#att_b" name="att_b">b</a> (required) contains a sequence of bytes.   
+  Each byte always has two unsigned hex digits. Multiple values are separated by spaces.   
+  <p>The attribute <a class="charclass" href="#att_u" name="att_u">u</a> (required) contains a sequence of Unicode code points.  
+  Each code point has one or more  
+      unsigned hex digits. Multiple values must be separated by spaces. Where  
+      possible, this should be in Normalization Form C.  
+  <p>The attribute <a class="charclass" href="#att_v" name="att_v">v</a> (optional) specifies the version.
+      It has the same format as the &lt;version&gt; field
+      in the <a class="charclass" href="#att_id">id</a>
+      in <a href="#Header">Section 3.1</a>, <i>Header</i>.
+      There is no default value.</p>
+
+  <p>The <a class="charclass" href="#att_v">v</a> version matches the version part 
+      of a mapping table <a class="charclass" href="#att_id">id</a> 
+      (it matches the version part of the current table <a class="charclass" href="#att_id">id</a>, 
+      or of a previous-version table <a class="charclass" href="#att_id">id</a>, 
+      see <a href="#Header">Section 3.1</a>, <i>Header</i>) 
+      and is different from the <a class="charclass" href="#att_version">version</a> 
+      attribute in the mapping table history (see <a href="#History">Section 3.2</a>, 
+  <i>History</i>) 
+      which is incremented even for editorial changes.</p> 
+
+  <p>If someone requests a mapping table of a certain version, such as
+          &quot;source-myname-1999b&quot;, then any table with a later version
+          can be used, such as &quot;source-myname-2000&quot;. All the
+          assignment elements in the later file that have a version that is
+          lexically less than or equal to the requested version are used.
+  <p>If there are any such assignment elements that would conflict except
+          for version, then the lexically larger version is chosen.
+  <p>The attribute <a class="charclass" href="#att_c" name="att_c">c</a> (optional) provides the actual character(s) expressed in <a class="charclass" href="#att_u">u</a>. 
+      This information is redundant, but provides readability. 
+</blockquote>
+  <p>The element <a class="charclass" href="#elem_fub" name="elem_fub">fub</a> specifies a fallback mapping from Unicode to bytes, 
+  to be used if an API requests a &quot;best effort.&quot; It has the same 
+  attributes as <a class="charclass" href="#elem_a">a</a>, plus two additional optional attributes. These are 
+  provided for readability, and are not required.</p> 
+  <p class="dtd">&lt;!ELEMENT fub EMPTY><br>                 
+  &lt;!ATTLIST fub<br>                 
+  &nbsp;&nbsp;&nbsp; b NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; u NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; c CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; ru CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; rc CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; v CDATA #IMPLIED<br>                 
+  ></p>
+<blockquote>
+  The attribute
+  <a class="charclass" href="#att_ru" name="att_ru">ru</a> (optional) indicates the roundtrip mapping: The Unicode code points
+  resulting from mapping the fallback byte sequence back to Unicode.
+  <p>The attribute <a class="charclass" href="#att_rc" name="att_rc">rc</a> (optional) indicates the actual character value of the
+      roundtrip mapping.
+</blockquote>
+    <p><b>Note: </b>The attributes <a class="charclass" href="#att_c">c</a>, <a class="charclass" href="#att_ru">ru</a>, and <a class="charclass" href="#att_rc">rc</a> could have been XML comments,
+    however as attributes, they display better by typical browsers. Their contents
+    are not checked for validity, and they are <b>not</b>
+    to be used in generating internal mapping tables.</p>
+  <p>The element <a class="charclass" href="#elem_fbu" name="elem_fbu">fbu</a> specifies a fallback mapping from bytes to Unicode, 
+  to be used if an API requests a &quot;best effort.&quot; Normally this element 
+  is neither required nor desired. Byte sequences with no Unicode equivalent should 
+  be assigned to private use characters (E000..F8FF, E0000..EFFFD, 
+  100000..10FFFD). See <a href="#Completeness">Section 1.2</a>, <i>Completeness</i>. This element 
+  has the same attributes as <a class="charclass" href="#elem_a">a</a>, except that it excludes the attribute <a class="charclass" href="#att_c">c.</a></p> 
+  <p class="dtd">&lt;!ELEMENT fbu EMPTY><br>                 
+  &lt;!ATTLIST fbu<br>                 
+  &nbsp;&nbsp;&nbsp; b NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; u NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; v CDATA #IMPLIED<br>                 
+  ></p>
+  <p>The element <a class="charclass" href="#elem_sub1" name="elem_sub1">sub1</a> specifies a Unicode code point that is unassigned (unmappable 
+  to the encoding) and maps to the &quot;narrow&quot; <a class="charclass" href="#att_sub1">sub1</a> replacement 
+  character instead of the (default) &quot;wide&quot; <a class="charclass" href="#att_sub">sub</a> replacement 
+  character. This element has only the two attributes <a class="charclass" href="#att_u">u</a> (required) and <a class="charclass" href="#att_c">c</a> 
+  (optional).</p> 
+  <p class="dtd">&lt;!ELEMENT sub1 EMPTY><br>                 
+  &lt;!ATTLIST sub1<br>                 
+  &nbsp;&nbsp;&nbsp; u NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; c CDATA #IMPLIED<br>                 
+  &nbsp;&nbsp;&nbsp; v CDATA #IMPLIED<br>                 
+  ></p>
+  <table class="wide">
+    <caption>Summary of Attributes for Assignment Elements</caption>
+    <tr>
+      <th>Attribute</th>
+      <th>Elements to&nbsp; which it applies</th>              
+      <th>Required/Optional</th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <td> <a class="charclass" href="#att_u">u</a> </td>
+      <td> 
+  <a class="charclass" href="#elem_a">a</a>, <a class="charclass" href="#elem_fub">fub</a>, 
+        <a class="charclass" href="#elem_fbu">fbu</a>, <a class="charclass" href="#elem_sub1">sub1</a></td>
+      <td>Required</td>
+      <td>Sequence of Unicode code points</td>
+    </tr>
+    <tr>
+      <td><a class="charclass" href="#att_c">c</a></td>
+      <td><a class="charclass" href="#elem_a">a</a>, <a class="charclass" href="#elem_fub">fub</a>, 
+        <a class="charclass" href="#elem_sub1">sub1</a></td>
+      <td>Optional</td>
+      <td>Character(s) expressed by <a class="charclass" href="#att_u">u</a> </td> 
+    </tr>
+    <tr>
+      <td><a class="charclass" href="#att_b">b</a> </td>
+      <td><a class="charclass" href="#elem_a">a</a>, <a class="charclass" href="#elem_fub">fub</a>, 
+        <a class="charclass" href="#elem_fbu">fbu</a></td>
+      <td>Required</td>
+      <td>Sequence of bytes</td>
+    </tr>
+    <tr>
+      <td><a class="charclass" href="#att_v">v</a> </td>
+      <td><a class="charclass" href="#elem_a">a</a>, <a class="charclass" href="#elem_fub">fub</a>, 
+        <a class="charclass" href="#elem_fbu">fbu</a>, <a class="charclass" href="#elem_sub1">sub1</a></td>
+      <td>Optional</td>
+      <td>Version part 
+      of a mapping table <a class="charclass" href="#att_id">id</a> 
+      </td>
+    </tr>
+    <tr>
+      <td><a class="charclass" href="#att_ru">ru</a></td>
+      <td><a class="charclass" href="#elem_fub">fub</a></td>
+      <td>Optional</td>
+      <td>Sequence of Unicode code points; <a class="charclass" href="#att_u">u</a>  
+        result of another <a class="charclass" href="#elem_a">a</a> 
+        or <a class="charclass" href="#elem_fbu">fbu</a> mapping 
+        of the <a class="charclass" href="#att_b">b</a>  bytes</td>
+    </tr>
+    <tr>
+      <td><a class="charclass" href="#att_rc">rc</a> </td>
+      <td><a class="charclass" href="#elem_fub">fub</a></td>
+      <td>Optional</td>
+      <td>Character(s) expressed by <a class="charclass" href="#att_ru">ru</a></td>
+    </tr>
+  </table>
+  <p>The element <a class="charclass" href="#elem_range" name="elem_range">range</a> specifies that a range of byte sequences and    
+  Unicode values map together. It is simply a way to abbreviate a list of <a class="charclass" href="#elem_a">a</a>    
+  elements. The attributes are <a class="charclass" href="#att_bFirst">bFirst</a>, <a class="charclass" href="#att_bLast">bLast</a>, <a class="charclass" href="#att_uFirst">uFirst</a>, <a class="charclass" href="#att_uLast">uLast</a>,    
+  <a class="charclass" href="#att_bMin">bMin</a>, <a class="charclass" href="#att_bMax">bMax</a> and <a class="charclass" href="#att_v">v</a>. The range of Unicode code points varies    
+  continuously from <a class="charclass" href="#att_uFirst" name="att_uFirst">uFirst</a> to <a class="charclass" href="#att_uLast" name="att_uLast">uLast</a>. For enumerating the byte    
+  sequences, the values are incremented from <a class="charclass" href="#att_bFirst" name="att_bFirst">bFirst</a> to <a class="charclass" href="#att_bLast" name="att_bLast">bLast</a> in    
+  lexical order. That is, the last byte is incremented. If the byte value    
+  exceeds the corresponding byte in <a class="charclass" href="#att_bMax" name="att_bMax">bMax</a>, it is reset to the    
+  corresponding byte in <a class="charclass" href="#att_bMin" name="att_bMin">bMin</a>, and the previous byte in the sequence is    
+  incremented. This process is repeated for each of the bytes from <a class="charclass" href="#att_bFirst">bFirst</a>    
+  to <a class="charclass" href="#att_bLast">bLast</a>. The <a class="charclass" href="#att_v">v</a> attribute is interpreted the same as it is in    
+  the <a class="charclass" href="#elem_a">a</a> element.</p>    
+
+  <p class="dtd">&lt;!ELEMENT range EMPTY><br>                 
+  &lt;!ATTLIST range<br>                 
+  &nbsp;&nbsp;&nbsp; bFirst NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; bLast NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; uFirst NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; uLast NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; bMin NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; bMax NMTOKENS #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; v CDATA #IMPLIED<br>                 
+  ></p>
+
+  <h4>3.4.1 <a name="Multiple_Characters">Mapping Multiple Characters</a></h4>
+
+  <p>A mapping may specify multiple characters on the Unicode
+  side  in the <a class="charclass" href="#att_u">u</a> attribute, the code page side  in the <a class="charclass" href="#att_b">b</a>
+  attribute, or both. Such mappings are used when Unicode represents a code page
+  character with a character sequence, for example U+304B U+309A for a
+  Ka with a semi-voiced mark in JIS X 0213.</p>
+
+  <p>Each one of the multiple Unicode code points must be
+  represented by a hexadecimal number between 0000 and 10FFFF, for example &quot;304B 309A&quot;.</p>
+
+  <p>A multi-character byte sequence must consist of consecutive
+  complete single-character byte sequences that are each valid according to the
+  validity specification. For example, with the windows-932-2000 validity
+  specification, the byte sequence &quot;84 44 45 E2 F3&quot; is a valid
+  three-character byte sequence, but &quot;84 44 45 E2&quot; is not valid
+  because it contains one incomplete byte sequence &quot;E2&quot; after two
+  valid ones (&quot;84 44&quot; and &quot;45&quot;).</p>
+
+  <h4>3.4.2 <a name="Assignment_Error_Conditions">Error Conditions</a></h4>
+
+<p>All byte sequences that are specified in assignment elements
+      must be valid according to the validity
+      specification. <i>Otherwise the file is invalid.</i> Each byte sequence must consist of
+one or more complete
+          single-character byte sequences that are each valid according to the
+          validity specification. Otherwise the file is invalid.
+          If an assignment element's byte sequence is <b>UNASSIGNED</b> in the validity
+          specification, the file is invalid.</p>
+All Unicode code point sequences must contain one or                    
+      more Unicode code points, each represented by                    
+  a hexadecimal number between 0000 and 10FFFF. <i>Otherwise the file is invalid.</i>                    
+ If a code point exceeds the <a class="charclass" href="#att_max">max</a> value in the validity                    
+          specification associated with the byte sequence in that assignment                    
+          statement, it is invalid. If <a class="charclass" href="#att_normalization">normalization</a> is specified in the header to be &quot;<b>NFC</b>&quot;,                    
+          &quot;<b>NFD</b>&quot;, or &quot;<b>NFC_NFD</b>&quot;, then the code                    
+          point sequence must be valid in the respective normalization form.                    
+  <p>This specification does not require that Unicode code point
+  sequences are well-formed UTF-32 code unit sequences. Therefore, the use of
+  CharMapML in and of itself does not guarantee that the result of a mapping is
+  in a Unicode Encoding Form.</p>
+<p>Sequences cannot map assigned legacy characters to Unicode code points that are unassigned in the latest version of the Unicode Standard. They can map unassigned legacy code positions to unassigned Unicode code points, where those unassigned legacy code positions are defined as corresponding to Unicode code points, such as is done in GB 18030.
+If there are valid characters in the legacy encoding that are
+              not yet in Unicode, they must be mapped to private use characters
+              if they are mapped: (E000..F8FF, E0000..EFFFD, 100000..10FFFD).</p>
+A <a class="charclass" href="#elem_range">range</a> is treated as if it were expanded to a list of <a class="charclass" href="#elem_a">a</a>                    
+      elements in terms of assessing the validity of the mapping table. In                    
+      addition, the element is invalid if:                    
+      <ul>
+        <li><a class="charclass" href="#att_bFirst">bFirst</a>, <a class="charclass" href="#att_bLast">bLast</a>, <a class="charclass" href="#att_bMin">bMin</a>, <a class="charclass" href="#att_bMax">bMax </a> do not all
+          have the same number of bytes.</li>
+        <li>Each byte in <a class="charclass" href="#att_bFirst">bFirst</a>, <a class="charclass" href="#att_bLast">bLast</a> is not between the
+          corresponding bytes in <a class="charclass" href="#att_bMin">bMin</a>, <a class="charclass" href="#att_bMax">bMax.</a></li>
+        <li><a class="charclass" href="#att_bLast">bLast</a> does not match the final byte sequence reached in the
+          process of generating the <a class="charclass" href="#elem_a">a</a> elements.</li>
+      </ul>
+The <a class="charclass" href="#att_sub1">sub1</a> attribute of assignments must be exactly one byte if specified.                    
+      <i>Otherwise the file is invalid.</i>
+<p>A <a class="charclass" href="#elem_sub1">sub1</a> element must not be used without specifying the <a class="charclass" href="#att_sub1">sub1</a>
+      attribute of <a class="charclass" href="#elem_assignments">assignments</a>. <i>Otherwise the file is invalid.</i>
+<p>For the purpose of validity (and selecting versions) an <a class="charclass" href="#elem_a">a</a> element
+      is treated as if it expanded into an <a class="charclass" href="#elem_fub">fub</a> element and an <a class="charclass" href="#elem_fbu">fbu</a>
+      element.
+<p>An <a class="charclass" href="#elem_fub">fub</a> or <a class="charclass" href="#elem_sub1">sub1</a> element conflicts with any other <a class="charclass" href="#elem_fub">fub</a>
+      or <a class="charclass" href="#elem_sub1">sub1</a> element that has the same Unicode code
+point sequence and the same
+      version.
+<p>An <a class="charclass" href="#elem_fbu">fbu</a> element conflicts with any other <a class="charclass" href="#elem_fbu">fbu</a> element that
+      has the same byte sequence and the same version.
+<p><i>In the case of conflicts, the file is invalid.</i>
+  <h3>3.5 <a name="ISO_2022">ISO 2022</a></h3>
+  <p>Country- or vendor-specific ISO 2022 [<a href="#ISO2022">ISO2022</a>] encodings are used frequently on the
+  Internet. They each use a subset of the ISO 2022 framework and allow only few
+  embedded encodings. The &quot;very stateful&quot; nature of an ISO 2022
+  encoding makes it infeasible to describe it fully with one  XML file. Instead, the XML character mapping table format provides for a kind of
+  table of contents for an ISO 2022 encoding as an alternative to the usual
+  validity specification(s) and assignments. It allows the identification of the
+  invocation sequences and state shifts that are associated with each mapping
+  table (identified by its canonical name). It does not fully specify all the elements and semantics of the particular ISO 2022 subset.</p>
+  <p><i>ISO 2022 Terminology:</i></p>
+  <blockquote>
+    <p>An <i>escape sequence</i> announces an embedded encoding and  immediately changes to that encoding.</p>
+    <p>A <i>designator sequence</i> announces an embedded encoding but does not
+    cause an immediate change to that encoding. Instead, such a change is later
+    invoked with a permanent Shift-In or Shift-Out (SI/SO) control code, or with
+    a one-time Single-Shift 2 or 3 (SS2/SS3).</p>
+  </blockquote>
+  <p>In the XML format, designator sequences are listed under the codes that 
+  shift to them. The details of how designator sequences interact with shift 
+  codes are not specified in the XML format. The initial state is generally 
+  US-ASCII. Otherwise, it must be specified with a <a class="charclass" href="#elem_default2022" name="elem_default2022">default2022</a> 
+  element.</p> 
+  <p class="dtd">&lt;!ELEMENT iso2022 (default2022?, (escape|si|so|ss2|ss3)+)><br>                 
+  &lt;!ELEMENT default2022 EMPTY><br>                 
+  &lt;!ATTLIST default2022<br>                 
+  &nbsp;&nbsp;&nbsp; name NMTOKEN #REQUIRED<br>                 
+  ></p>
+  <p><i>Example:</i></p>
+  <p>This example shows all the features of ISO-2022 specifications; it is not a
+  real-world encoding.</p>
+  <pre>  &lt;!--
+    ISO 2022 encoding:
+    Specifying names of mapping tables of embedded encodings,
+    and escape and designator sequences
+  --&gt;
+  &lt;iso2022&gt;
+    &lt;!-- Default single-byte encoding (US-ASCII is implied) --&gt;
+    &lt;default2022 name=&quot;jis-x_201&quot;/&gt;
+
+    &lt;!-- Escape sequences switch directly to the specified encoding --&gt;
+    &lt;escape sequence=&quot;1B 28 4A&quot; name=&quot;jis-roman&quot;/&gt;
+
+    &lt;!-- Designator sequences specify which encoding to switch to when the shift code occurs --&gt;
+    &lt;so&gt;
+      &lt;designator sequence=&quot;1B 24 29 41&quot; name=&quot;gb-2312_80-1980&quot;/&gt;
+      &lt;designator sequence=&quot;1B 24 29 47&quot; name=&quot;cns-11643_2-1992&quot;/&gt;
+      &lt;designator sequence=&quot;1B 24 29 45&quot; name=&quot;iso-ir_165-1992&quot;/&gt;
+    &lt;/so&gt;
+
+    &lt;ss2&gt;
+      &lt;designator sequence=&quot;1B 24 2A 48&quot; name=&quot;cns-11643_2-1992&quot;/&gt;
+    &lt;/ss2&gt;
+
+    &lt;ss3&gt;
+      &lt;designator sequence=&quot;1B 24 2B 49&quot; name=&quot;cns-11643_3-1992&quot;/&gt;
+      &lt;designator sequence=&quot;1B 24 2B 4a&quot; name=&quot;cns-11643_4-1992&quot;/&gt;
+    &lt;/ss3&gt;
+  &lt;/iso2022&gt;
+</pre>
+  <h2>4 <a name="Names">Alias Table Format</a></h2>
+  <p>A mapping alias table is a separate XML file that provides information
+  associated with multiple character mapping tables. It provides display names  suitable
+  for display to end-users, aliases,
+  and best-fit mappings for each character mapping table.</p>
+  <p><a class="charclass" href="#elem_characterMappingAliases" name="elem_characterMappingAliases">characterMappingAliases</a> (required) is the root. It contains any 
+  number of <a class="charclass" href="#elem_mapping">mapping</a> elements.</p> 
+  <p class="dtd">&lt;!ELEMENT characterMappingAliases (mapping*)></p> 
+  <p><a class="charclass" href="#elem_mapping" name="elem_mapping">mapping</a> (optional) marks an element that contains any number of <a class="charclass" href="#elem_display">display</a>, 
+  <a class="charclass" href="#elem_alias">alias</a>, and <a class="charclass" href="#elem_bestFit">bestFit</a> elements. It has one required attribute, <a class="charclass" href="#att_mapping_id" name="att_mapping_id">id</a>. 
+  This provides the mapping table id in the canonical format, for example, 
+  &quot;us-ascii-1968&quot;.</p>
+  <p class="dtd">&lt;!ELEMENT mapping (display*, alias*, bestFit*)><br>                 
+  &lt;!ATTLIST mapping<br>                 
+  &nbsp;&nbsp;&nbsp; id CDATA #REQUIRED<br>                 
+  ><br>
+  <br>
+  <a class="charclass" href="#elem_display" name="elem_display">display</a> (optional) provides names in different languages, suitable for                 
+  user menus. It has two required attributes, the <a class="charclass" href="#att_language" name="att_language">language</a> (xml:lang) and                 
+  the <a class="charclass" href="#att_display_name" name="att_display_name">name</a> in that language.</p>                 
+  <p class="dtd">&lt;!ELEMENT display EMPTY><br>                 
+  &lt;!ATTLIST display<br>                 
+  &nbsp;&nbsp;&nbsp; name CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; xml:lang CDATA #REQUIRED<br>                 
+  ></p>
+  <pre>&lt;display name=&quot;Western Europe (Latin-1, 8859-1)&quot; xml:lang=&quot;en&quot;/&gt;</pre>
+  <p><a class="charclass" href="#elem_alias" name="elem_alias">alias</a> (optional) provides common aliases for the canonical names. It 
+  has one required attribute, which is <a class="charclass" href="#att_alias_name" name="att_alias_name">name</a>. This provides the alias 
+  name, which should be spelled as specified by a standard or publication, if 
+  applicable.</p>
+  <p class="dtd">&lt;!ELEMENT alias EMPTY><br>                 
+  &lt;!ATTLIST alias<br>                 
+  &nbsp;&nbsp;&nbsp; name CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; preferredBy CDATA #IMPLIED<br>                 
+  ></p>
+  <p>Charset names and aliases should be matched according to <a href="#Charset_Alias_Matching">Section 
+  1.4</a>, <i>Charset Alias Matching</i>. The <a class="charclass" href="#att_preferredBy" name="att_preferredBy">preferredBy</a> attribute is optional. It is a space-delimited 
+  list of environments where that particular alias is used, for example, preferredBy=&quot;IANA 
+  IBM&quot;. If two different aliases for the same mapping have the same 
+  environment in their preferredBy attributes, then the first listed one is the 
+  preferred output alias for that environment. If an alias has two 
+  conflicting preferredBy attributes (to get the preferred output 
+  aliases correct), it is expressed as two different alias elements.</p> 
+  <pre>&lt;alias name=&quot;iso-8859-1&quot; preferredBy=&quot;MIME&quot;/&gt;</pre>
+  <p>Because aliases reflect current practice, the same alias may be 
+  applied to different mappings.<br> 
+  <br>
+  <a class="charclass" href="#elem_bestFit" name="elem_bestFit">bestFit</a> (optional) indicates a best-fit mapping <b>(B)</b> to use if 
+  the specified <a class="charclass" href="#elem_mapping">mapping</a> <b>(A)</b> is not installed. It has three 
+  required attributes:</p> 
+  <p class="dtd">&lt;!ELEMENT bestFit EMPTY><br>                 
+  &lt;!ATTLIST bestFit&nbsp;<br>                
+  &nbsp;&nbsp;&nbsp; id CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; matchingA CDATA #REQUIRED<br>                 
+  &nbsp;&nbsp;&nbsp; matchingB CDATA #REQUIRED<br>                 
+  ></p>
+  <ul>
+    <li><a class="charclass" href="#att_bestFit_id" name="att_bestFit_id">id</a> is the canonical id of the bestFit mapping <b>(B)</b></li>
+    <li><a class="charclass" href="#att_matchingA" name="att_matchingA">matchingA</a> is the percentage of identical round-trip mappings out
+    of A [that is, count(A∩B)/count(A)]</li>
+    <li><a class="charclass" href="#att_matchingB" name="att_matchingB">matchingB</a> is the percentage of identical round-trip mappings out
+    of B [that is, count(A∩B)/count(B)].</li>
+  </ul>
+  <p align="center"><img alt="diagram" border="0" src="charsetOverlap.gif" width="454" height="269"></p>
+  <p>For example, consider the above situation. Mapping A has 876
+  roundtrip mappings. Mapping B has 5,432 roundtrip mappings. Of these, 765 are
+  identical. Then the resulting values would be:</p>
+  <pre>&lt;bestFit id=&quot;...&quot; matchingA=&quot;87.3%&quot; matchingB=&quot;14.08%&quot;/&gt;</pre>
+  <p>Each percentage must be specified to sufficient accuracy such that when
+  multiplied and rounded, the result precisely represents the number of common
+  elements count(A∩B). Thus &quot;14%&quot; and &quot;14.1%&quot; are both insufficiently accurate
+  (for example, 5432 x 0.141 = 765.912, which rounds to the
+  incorrect value 766), while &quot;14.08%&quot; is sufficiently accurate (5432
+  x 0.1408 = 764.8256, which rounds to the correct value 765).</p>
+  <h4>Example</h4>
+  <p>Here is an example of a mapping element.</p>
+  <pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE characterMappingAliases
+  SYSTEM &quot;http://www.unicode.org/reports/tr22/CharacterMappingAliases.dtd&quot;&gt;
+
+&lt;characterMappingAliases&gt;
+ &lt;mapping id=&quot;us-ascii-1968&quot;&gt;
+  &lt;display xml:lang=&quot;en&quot; name=&quot;US (ASCII)&quot;/&gt;
+  &lt;alias name=&quot;us-ascii&quot; preferredBy=&quot;MIME&quot;/&gt;
+  &lt;alias name=&quot;ansi_x3.4-1968&quot;/&gt;
+  &lt;alias name=&quot;iso-ir-6&quot;/&gt;
+  &lt;alias name=&quot;ansi_x3.4-1&quot;/&gt;
+  &lt;alias name=&quot;iso_646.irv:1991&quot;/&gt;
+  &lt;alias name=&quot;ascii&quot;/&gt;
+  &lt;alias name=&quot;iso646-us&quot;/&gt;
+  &lt;alias name=&quot;us&quot;/&gt;
+  &lt;alias name=&quot;ibm367&quot;/&gt;
+  &lt;alias name=&quot;cp367&quot;/&gt;
+  &lt;alias name=&quot;csASCII&quot;/&gt;
+  &lt;bestFit id=&quot;...&quot; matchingA=&quot;87.3%&quot; matchingB=&quot;14.08%&quot;/&gt;
+ &lt;/mapping&gt;
+
+&lt;/characterMappingAliases&gt;</pre>
+  <h2>5 <a name="Samples">Samples</a></h2>
+  <p>The following provide samples that illustrate features of the format.</p>
+  <h3>5.1 <a name="Full_Sample">Full Sample</a></h3>
+  <p>The samples used in this document, plus DTDs are found in <a href="#Data_Files">Data
+  Files</a>. A sample of mapping tables constructed programmatically is provided
+  in the <a href="http://site.icu-project.org/charts/charset">ICU Conversion Table
+  Repository</a> [<a href="#ConvRef">Conv</a>] It can be viewed directly with
+  Internet Explorer, which will interpret the XML.</p>
+  <h3>5.2 <a name="UTF8_Sample">UTF-8 Sample</a></h3>
+  <p>While
+  a mapping file is never required for UTF-8 in practice because it is
+  algorithmically derived, it is instructive to see the use of the validity
+  element in examples.</p>
+  <h4>5.2.1 <a name="Partial_Validity_Checks">Partial Validity Checks</a></h4>
+  <p>Here is a simple version of the UTF-8 validity specification, with the
+  shortest-form bounds checking, surrogates, and exact limit bounds checking
+  omitted. This specification only checks the bounds for the first byte, and
+  that there are the appropriate number (0, 1, 2, or 3) of following bytes in
+  the right ranges. The single byte form does not need to be explicitly set; it
+  is simply any single byte that neither is illegal nor requires additional
+  bytes.</p>
+  <pre>&lt;validity&gt;
+ &lt;!--Validity specification for UTF-8, partial boundary checks--&gt;
+ &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;00&quot; e = &quot;7F&quot;/&gt;
+
+ &lt;!-- 2 byte form --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;C0&quot; e=&quot;DF&quot; next=&quot;final&quot; /&gt;
+ &lt;state type=&quot;final&quot; s=&quot;80&quot; e=&quot;BF&quot; /&gt;
+
+ &lt;!-- 3 byte form --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;E0&quot; e=&quot;EF&quot; next=&quot;prefinal&quot; /&gt;
+ &lt;state type=&quot;prefinal&quot; s=&quot;80&quot; e=&quot;BF&quot; next=&quot;final&quot; /&gt;
+
+ &lt;!-- 4 byte form --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;F0&quot; e=&quot;F4&quot; next=&quot;preprefinal&quot; /&gt;
+ &lt;state type=&quot;preprefinal&quot; s=&quot;80&quot; e=&quot;BF&quot; next=&quot;prefinal&quot; /&gt;
+&lt;/validity&gt; </pre>
+  <h4>5.2.2 <a name="Full_Validity_Checks">Full Validity Checks</a></h4>
+  <p>The following provides the full validity specification for UTF-8.</p>
+  <pre>&lt;validity&gt;
+ &lt;!--Validity specification for UTF-8, full boundary checks--&gt;
+ &lt;state type=&quot;FIRST&quot; next=&quot;VALID&quot; s=&quot;00&quot; e = &quot;7F&quot;/&gt;
+
+ &lt;!-- Normal Final Bytes --&gt;
+ &lt;state type=&quot;final&quot; s=&quot;80&quot; e=&quot;BF&quot; next=&quot;VALID&quot;/&gt;
+ &lt;state type=&quot;prefinal&quot;  s=&quot;80&quot; e=&quot;BF&quot; next=&quot;final&quot; /&gt;
+ &lt;state type=&quot;preprefinal&quot; s=&quot;80&quot; e=&quot;BF&quot; next=&quot;prefinal&quot; /&gt;
+
+ &lt;!-- 2 byte form, Normal --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;C2&quot; e=&quot;DF&quot; next=&quot;final&quot; /&gt;
+
+ &lt;!-- 3 byte form; Low range is special--&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;E0&quot;        next=&quot;prefinalLow&quot; /&gt;
+ &lt;state type=&quot;prefinalLow&quot; s=&quot;A0&quot; e=&quot;BF&quot; next=&quot;final&quot; /&gt;
+
+ &lt;!-- 3 byte form, Normal --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;E1&quot; e=&quot;EC&quot; next=&quot;prefinal&quot;  /&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;EE&quot; e=&quot;EF&quot; next=&quot;prefinal&quot;  /&gt;
+
+ &lt;!-- 3 byte form, Omitting Surrogates --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;ED&quot; next=&quot;prefinalBelowSurrogate&quot;  /&gt;
+ &lt;state type=&quot;prefinalBelowSurrogate&quot;  s=&quot;80&quot; e=&quot;9F&quot; next=&quot;final&quot; /&gt; </pre>
+  <pre> &lt;!-- 4 byte form, Low range is special --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;F0&quot;        next=&quot;preprefinalLow&quot; /&gt;
+ &lt;state type=&quot;preprefinalLow&quot; s=&quot;90&quot; e=&quot;BF&quot; next=&quot;prefinal&quot;/&gt;
+
+ &lt;!-- 4 byte form, Normal --&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;F1&quot; e=&quot;F3&quot; next=&quot;preprefinal&quot;   /&gt;
+
+ &lt;!-- 4 byte form, High range is special--&gt;
+ &lt;state type=&quot;FIRST&quot; s=&quot;F4&quot;        next=&quot;preprefinalHigh&quot; /&gt;
+ &lt;state type=&quot;preprefinalHigh&quot; s=&quot;80&quot; e=&quot;8F&quot; next=&quot;prefinal&quot;/&gt;
+&lt;/validity&gt;</pre>
+  <h2><a name="Data_Files">Data Files</a></h2>
+  <table cellspacing="12" cellpadding="0" border="0" class="noborder">
+    <tbody>
+      <tr>
+        <td valign="top" class="noborder">
+          <a href="CharacterMapping.dtd">CharacterMapping.dtd</a>
+        </td>
+        <td valign="top" class="noborder">DTD file for the Character Mapping Data format:</td>
+      </tr>
+      <tr>
+        <td valign="top" class="noborder">
+          <a href="CharacterMapping-5.dtd">CharacterMapping-5.dtd</a>
+        </td>
+        <td valign="top" class="noborder">latest version, and the version associated with this document</td>
+      </tr>
+      <tr>
+        <td valign="top" class="noborder">
+          <a href="CharacterMappingAliases.dtd">CharacterMappingAliases.dtd</a>
+        </td>
+        <td valign="top" class="noborder">DTD file for the Character Mapping Alias format:</td>
+      </tr>
+      <tr>
+        <td valign="top" class="noborder">
+          <a href="CharacterMappingAliases-3.dtd">CharacterMappingAliases-3.dtd</a>
+        </td>
+        <td valign="top" class="noborder">latest version, and the version associated with this document</td>
+      </tr>
+      <tr>
+        <td valign="top" class="noborder"><a href="SampleMappings.xml">SampleMappings.xml</a></td>
+        <td valign="top" class="noborder">Sample mapping file</td>
+      </tr>
+      <tr>
+        <td valign="top" class="noborder"><a href="SampleAliases.xml">SampleAliases.xml</a></td>
+        <td valign="top" class="noborder">Sample alias file</td>
+      </tr>
+      <tr>
+        <td valign="top" class="noborder"><a href="SampleAliases2.xml">SampleAliases2.xml</a></td>
+        <td valign="top" class="noborder">Sample alias file #2</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2><a name="References"><br>
+  References</a></h2>
+  <table cellspacing="12" cellpadding="0" border="0" class="noborder">
+    <tbody>
+      <tr>
+        <td valign="top" width="1" class="noborder">[<a name="BIDI">BIDI</a>]</td>
+        <td valign="top" class="noborder">
+          <p align="left">Unicode Standard Annex #9: The Bidirectional Algorithm<br>
+          <a href="http://www.unicode.org/reports/tr9/">http://www.unicode.org/reports/tr9/</a></td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder">[<a name="ConvRef">Conv</a>]</td>
+        <td valign="top" class="noborder">ICU Conversion Table Repository<br>
+          <a href="http://site.icu-project.org/charts/charset">http://site.icu-project.org/charts/charset</a></td>
+      </tr>
+      <tr>
+        <td class="noborder" width="1">[<a name="FAQ">FAQ</a>]</td>
+        <td class="noborder">Unicode Frequently Asked Questions<br>
+          <a href="http://www.unicode.org/faq/">http://www.unicode.org/faq/<br>
+          </a><i>For answers to common questions on technical issues.</i></td>
+      </tr>
+      <tr>
+        <td class="noborder" valign="top" width="1">[<a name="Feedback">Feedback</a>]</td>
+        <td class="noborder" valign="top">Reporting Errors and Requesting
+          Information Online<i><br>
+          </i><a href="http://www.unicode.org/reporting.html">http://www.unicode.org/reporting.html</a></td>
+      </tr>
+      <tr>
+        <td class="noborder" width="1">[<a name="Glossary">Glossary</a>]</td>
+        <td class="noborder">Unicode Glossary<a href="http://www.unicode.org/glossary/"><br>
+          http://www.unicode.org/glossary/<br>
+          </a><i>For explanations of terminology used in this and other
+          documents.</i></td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder">[<a name="IANA">IANA</a>]</td>
+        <td valign="top" class="noborder">
+          <p align="left">IANA character set registry<br>
+          <a href="http://www.iana.org/assignments/character-sets">http://www.iana.org/assignments/character-sets</a></td>
+      </tr>
+      <tr>
+        <td class="noborder" valign="top" width="1">[<a name="ISO2022">ISO2022</a>]</td>
+          <td class="noborder" valign="top">International Organization for Standardization.
+          <i>Information processing &mdash; ISO 7-bit and 8-bit coded character sets &mdash; Code Extension techniques.</i>
+          (ISO/IEC 2022:1994).
+          <i>For availability see <a href="http://www.iso.org/">http://www.iso.org/</a></i><br>
+          Identical to ECMA-35 <i>Character Code Structure and Extension Techniques</i>.
+          <i>For availability see <a href="http://www.ecma-international.org/publications/standards/Ecma-035.htm">http://www.ecma-international.org/publications/standards/Ecma-035.htm</a></i>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder">[<a name="Normal">Normal</a>]</td>
+        <td valign="top" class="noborder">
+          <p align="left">Unicode Standard Annex #15, Unicode Normalization
+          Forms<br>
+          <a href="http://www.unicode.org/reports/tr15/">http://www.unicode.org/reports/tr15/</a></td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder">[<a name="NormCharts">NormCharts</a>]</td>
+        <td valign="top" class="noborder">Normalization Charts<br>
+          <a href="http://www.unicode.org/charts/normalization/">http://www.unicode.org/charts/normalization/</a></td>
+      </tr>
+      <tr>
+        <td class="noborder" width="1">[<a name="Reports">Reports</a>]</td>
+        <td class="noborder">Unicode Technical Reports<br>
+          <a href="http://www.unicode.org/reports/">http://www.unicode.org/reports/<br>
+          </a><i>For information on the status and development process for
+          technical reports, and for a list of technical reports.</i></td>
+      </tr>
+      <tr>
+        <td class="noborder" valign="top" width="1">[<a name="Unicode">Unicode</a>]</td>
+        <td class="noborder" valign="top">The Unicode Standard<i><br>
+        For the latest version see:</i>
+        <a href="http://www.unicode.org/versions/latest/">http://www.unicode.org/versions/latest/</a>.<br>
+        <i>For the last major version see:</i> The Unicode Consortium.
+        <a href="http://www.unicode.org/versions/Unicode4.0.0/">The Unicode
+        Standard, Version 4.0</a>. (Boston, MA, Addison-Wesley, 2003. 0-321-18578-1)
+        <i>or online as </i>
+        <a href="http://www.unicode.org/versions/Unicode4.0.0/">http://www.unicode.org/versions/Unicode4.0.0/</a></td>
+      </tr>
+      <tr>
+        <td class="noborder" width="1">[<a name="Versions">Versions</a>]</td>
+        <td class="noborder">Versions of the Unicode Standard<br>
+          <a href="http://www.unicode.org/versions/">http://www.unicode.org/versions/<br>
+          </a><i>For details on the precise contents of each version of the
+          Unicode Standard, and how to cite them.</i></td>
+      </tr>
+    </tbody>
+  </table>
+  <h2><a name="Modifications"><br>
+  Modifications</a></h2>
+  <p>The following summarizes modifications from the previous versions of this
+  document.</p>
+  <table cellspacing="4" cellpadding="0" border="0" class="noborder">
+    <tbody>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber8">8</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>Added/changed text in the introduction reflecting the 
+			stabilization of this standard.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber7">7</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>Fixed/updated some links.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber6">6</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>Changed the next attribute of the state element from #REQUIRED to default to "VALID".</li>
+            <li>Added "Unicode" to the title.</li>
+            <li>Fixed reported typos and omissions.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber5">5</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>Promoted to Unicode Technical Standard; inserted Conformance
+              section (new section 2).
+            </li>
+            <li>Added explicit text about multi-character mappings.
+            </li>
+            <li>Many editorial changes</li>
+			<li>Fixed typo in version number</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber4">4</a></td>
+        <td valign="top" class="noborder">Revision 4 being a proposed update, only changes between revision 5 and 3 
+	are noted here.</td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber3">3</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>Added new sections
+              <ul>
+                <li><a href="#Dual_Substitution_Handling">1.1.2 Dual
+                  Substitution Handling</a></li>
+                <li><a href="#Charset_Alias_Matching">1.4 Charset Alias Matching</a></li>
+                <li><a href="#Simple_SI_SO-Stateful_Encodings">2.3.1 Simple
+                  SI/SO- Stateful Encodings</a></li>
+                <li><a href="#ISO_2022">2.5 ISO 2022</a></li>
+              </ul>
+            </li>
+            <li>Added some references to the new section.</li>
+            <li>Updated DTD with the new elements and attributes.
+              <ul>
+                <li>DTD files now versioned (although these and other changes
+                  will always be backwards-compatible.) The previous DTD files
+                  are on X-2.2.dtd.</li>
+              </ul>
+            </li>
+            <li>Minor editing</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber2.2">2.2</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>Removed imports.</li>
+            <li>Added discussion of bestFit mapping tables.</li>
+            <li>Changed fallback aliases to bestFit. Changed ranks to
+              percentages.</li>
+            <li>Added diagram and discussion of PU mappings.</li>
+            <li>Added UNASSIGNED, max to the validity spec.</li>
+            <li>Added range.</li>
+            <li>Added more error conditions.</li>
+            <li>Added note that we anticipate extending this for complex mappings.</li>
+            <li>Moved Alias table to separate section.</li>
+            <li>Added DTDs and samples</li>
+            <li>Minor editing.</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" width="1" class="noborder"><a name="TrackingNumber2.1">2.1</a></td>
+        <td valign="top" class="noborder">
+          <ul>
+            <li>The aliases and display names have been moved into a separate,
+              centralized table. A sample is also provided.</li>
+            <li>The syntax of the fallback assignments and validity
+              specification have been simplified, and some of the identifiers
+              changed for clarity.</li>
+            <li>Pointers are provided to sample tables.</li>
+            <li>Minor editing</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h2><a name="Acknowledgments">Acknowledgments</a></h2>
+  <p>Thanks to Kent Karlsson, Ken Borgendale, Bertrand Damiba, Mark Leisher,
+  Tony Graham, Markus Scherer, Peter Constable, Martin Duerst, Martin Hoskin,
+  Ken Whistler and Frank Ellermann
+  for their feedback on versions of this document. Thanks
+  especially to Markus Scherer for contributing most of the text for version 3.</p>
+  <hr align="LEFT">
+  <p><font size="2">Copyright © 1999-2017 Unicode, Inc. All Rights Reserved.                    
+  The Unicode Consortium makes no expressed or implied warranty of any kind, and                    
+  assumes no liability for errors or omissions. No liability is assumed for                    
+  incidental and consequential damages in connection with or arising out of the                    
+  use of the information or programs contained or accompanying this technical                    
+  report.</font></p>
+  <p><font size="2">Unicode and the Unicode logo are trademarks of Unicode,
+  Inc., and are registered in some jurisdictions.</font></p>
+</div>
+
+</body>
+
+</html>
